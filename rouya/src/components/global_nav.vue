@@ -12,9 +12,17 @@
         </el-col>
         <el-col class="nav-right" :span="12">
           <a>购物车</a>
-          <span>
-            <a>注册</a>
-            <a>登录</a>
+          <span v-if="session.loggedIn()&&!session.isAdmin()">
+            <a>{{session.user('username')}}</a>
+            <a class="logout" @click="session.logOut()">登出</a>
+          </span>
+          <span v-else-if="session.loggedIn()&&session.isAdmin()">
+            <a>管理</a>
+            <a class="logout" @click="session.logOut()">登出</a>
+          </span>
+          <span v-else>
+            <router-link to="/signup">注册</router-link>
+            <router-link to="/login">登录</router-link>
           </span>
         </el-col>
       </el-row>
@@ -23,7 +31,15 @@
 </template>
 
 <script>
-export default {};
+import session from "../lib/session.js";
+
+export default {
+  data() {
+    return {
+      session
+    };
+  }
+};
 </script>
 
 <style scoped>
@@ -37,7 +53,7 @@ export default {};
   color: #b0b0b0;
 }
 .global-nav a:hover {
-  color: #333;
+  color: #922b2f;
 }
 .nav-left a {
   padding-right: 1.5rem;

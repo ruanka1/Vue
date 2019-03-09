@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <globalNav/>
+    <GlobalNav/>
     <router-view></router-view>
-    <globalFooter/>
+    <GlobalFooter/>
   </div>
 </template>
 
 <script>
-import globalNav from "./components/global_nav.vue";
-import globalFooter from "./components/global_footer.vue";
+import GlobalNav from "./components/global_nav.vue";
+import GlobalFooter from "./components/global_footer.vue";
 export default {
-  components: { globalNav, globalFooter }
+  components: { GlobalNav, GlobalFooter }
 };
 </script>
 

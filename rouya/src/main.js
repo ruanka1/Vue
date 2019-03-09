@@ -2,6 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import "./css/base.css"
 
+import api from "./lib/api"
+window.api = api
+
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI)

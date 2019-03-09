@@ -33,9 +33,6 @@
 </template>
 
 <style scoped>
-img {
-  display: inline-block;
-}
 .footer {
   background-color: #f7f7f7;
   color: #666;
@@ -46,6 +43,9 @@ img {
 }
 .link-item {
   margin-right: 0.8rem;
+}
+.link-item:hover {
+  color: #922b2f;
 }
 .meta-info img {
   vertical-align: bottom;
