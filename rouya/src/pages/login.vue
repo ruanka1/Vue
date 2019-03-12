@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="signup-container">
     <div class="form-container">
       <h1>登录</h1>
       <form @submit.prevent="login">
@@ -14,9 +14,9 @@
         <div class="error">
           <!-- eslint-disable-next-line -->
         </div>
-        <button type="submit">登录</button>
+        <button class="btn" type="submit" >登录</button>
         <el-button type="text">
-          <router-link class="forgetPassword">忘记密码？</router-link>
+          <router-link to="/findback" class="forgetPassword">忘记密码？</router-link>
         </el-button>
       </form>
     </div>
@@ -63,7 +63,7 @@ export default {
             session.logIn(r.data.id, r.data);
           }
         } else {
-          this.error.push({ loginName: "用户名不存在" });
+          this.error.push({ loginName: "账户不存在" });
         }
       });
     },
@@ -79,42 +79,15 @@ export default {
 </script>
 
 <style scoped>
-.container {
+@import url("../css/signup.css");
+.signup-container {
   height: 700px;
-  background-image: url("../img/logo.jpg");
-  background-position: -5rem 2rem;
-  background-repeat: no-repeat;
-  margin: auto;
   position: relative;
 }
 .form-container {
   position: absolute;
   right: 0;
-  top: 12rem;
-  width: 400px;
-  border-radius: 4px;
-  padding: 0 2rem 2rem 2rem;
-  box-shadow: 0 0 2px 1px #d5d5d5;
-}
-label {
-  display: block;
-  padding-bottom: 0.5rem;
-  font-size: 0.9rem;
-  color: #606266;
-  line-height: 2rem;
-}
-.el-input {
-  margin-bottom: 0.5rem;
-}
-
-.sendCodeBtn {
-  width: 130px;
-}
-button[type="submit"] {
-  margin-top: 0.5rem;
-}
-.forgetPassword {
-  margin-left: 1rem;
+  top: 11.5rem;
 }
 </style>
 

@@ -1,34 +1,40 @@
 <template>
-  <el-row class="container">
+  <el-row class="signup-container">
     <div class="form-container">
       <h1>注册</h1>
       <form @submit.prevent="signup">
         <el-tabs v-model="signupBy">
-          <label>用户名
+          <label>
+            <div>用户名</div>
             <el-input type="text" v-model="form.username"></el-input>
             <div class="error" v-for="it in error" :key="it.id">{{it.username}}</div>
           </label>
           <el-tab-pane label="手机注册" name="phone">
-            <label>手机
+            <label>
+              <div class="title">手机</div>
               <el-input v-model="form.phone"></el-input>
               <div class="error" v-for="it in error" :key="it.id">{{it.phone}}</div>
             </label>
           </el-tab-pane>
           <el-tab-pane label="邮箱注册" name="mail">
-            <label>邮箱
+            <label>
+              <div class="title">邮箱</div>
               <el-input v-model="form.mail"></el-input>
               <div class="error" v-for="it in error" :key="it.id">{{it.mail}}</div>
             </label>
           </el-tab-pane>
-          <label>密码
+          <label>
+            <div class="title">密码</div>
             <el-input type="password" v-model="form.password"></el-input>
             <div class="error" v-for="it in error" :key="it.id">{{it.password}}</div>
           </label>
-          <label>确认密码
+          <label>
+            <div class="title">确认密码</div>
             <el-input type="password" v-model="form.rep_password"></el-input>
             <div class="error" v-for="it in error" :key="it.id">{{it.rep_password}}</div>
           </label>
-          <label>验证码
+          <label>
+            <div class="title">验证码</div>
             <fieldset :disabled="usernameExist||accountExist||!this.form[this.signupBy]">
               <el-row>
                 <el-col :span="14">
@@ -42,7 +48,7 @@
             </fieldset>
           </label>
           <label>
-            <button type="submit">注册</button>
+            <button class="btn" type="submit">注册</button>
           </label>
         </el-tabs>
       </form>
@@ -152,34 +158,5 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  background-image: url("../img/logo.jpg");
-  background-position: -5rem 2rem;
-  background-repeat: no-repeat;
-  margin: auto;
-}
-.form-container {
-  float: right;
-  margin: 2rem 0;
-  width: 400px;
-  border-radius: 4px;
-  padding: 0 2rem 2rem 2rem;
-  box-shadow: 0 0 2px 1px #d5d5d5;
-}
-label {
-  display: block;
-  padding-bottom: 0.5rem;
-  font-size: 0.9rem;
-  color: #606266;
-  line-height: 2rem;
-}
-.el-input {
-  margin-bottom: 0.5rem;
-}
-.sendCodeBtn {
-  width: 130px;
-}
-button[type="submit"] {
-  margin-top: 0.5rem;
-}
+@import url("../css/signup.css");
 </style>

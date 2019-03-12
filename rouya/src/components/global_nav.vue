@@ -17,7 +17,7 @@
             <a class="logout" @click="session.logOut()">登出</a>
           </span>
           <span v-else-if="session.loggedIn()&&session.isAdmin()">
-            <a>管理</a>
+            <router-link to="/admin">管理</router-link>
             <a class="logout" @click="session.logOut()">登出</a>
           </span>
           <span v-else>
@@ -44,7 +44,7 @@ export default {
 
 <style scoped>
 .global-nav {
-  background-color: #f7f7f7;
+  background-color: #f1f1f1;
   height: 2rem;
   font-size: 0.7rem;
   padding: 0.5rem 0;

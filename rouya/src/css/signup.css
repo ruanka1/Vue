@@ -1,0 +1,40 @@
+.signup-container {
+    background-image: url("../img/background.png");
+    background-repeat: no-repeat;
+    background-position: 0rem 2rem;
+    margin: auto;
+    width: 1080px;
+}
+
+.form-container {
+    float: right;
+    margin: 2rem 0;
+    width: 400px;
+    border-radius: 4px;
+    padding: 0 2rem 2rem 2rem;
+    box-shadow: 0 0 2px 1px #d5d5d5;
+}
+
+label {
+    display: block;
+    padding-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #606266;
+    line-height: 2rem;
+}
+
+.el-input {
+    margin-bottom: 0.5rem;
+}
+
+.sendCodeBtn {
+    width: 130px;
+}
+
+.forgetPassword {
+    margin-left: 1rem;
+}
+
+.btn {
+    margin-top: .5rem;
+}

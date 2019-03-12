@@ -34,7 +34,7 @@
 
 <style scoped>
 .footer {
-  background-color: #f7f7f7;
+  background-color: #f1f1f1;
   color: #666;
   font-size: 0.6rem;
 }

@@ -4,7 +4,7 @@
       <el-row>
         <el-col class="logo" :span="5">
           <router-link to="/">
-            <img src="../img/logo.jpg">
+            <img src="../img/logo.png">
           </router-link>
         </el-col>
         <el-col class="search-bar" :span="19">
