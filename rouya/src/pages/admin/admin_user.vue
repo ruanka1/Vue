@@ -18,16 +18,16 @@
         label-width="100px"
       >
         <el-form-item label="用户名" prop="username">
-          <el-input autocomplete="off" v-model="form.username"></el-input>
+          <el-input v-model="form.username" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="手机" prop="phone">
-          <el-input autocomplete="off" v-model="form.phone"></el-input>
+          <el-input v-model="form.phone" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="mail">
-          <el-input autocomplete="off" v-model="form.mail"></el-input>
+          <el-input v-model="form.mail" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input autocomplete="off" v-model="form.password"></el-input>
+          <el-input v-model="form.password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('form')">提交</el-button>

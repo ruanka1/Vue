@@ -33,9 +33,9 @@
             <el-input type="password" v-model="form.rep_password"></el-input>
             <div class="error" v-for="it in error" :key="it.id">{{it.rep_password}}</div>
           </label>
-          <label>
+          <label v-show="!hideCaptcha">
             <div class="title">验证码</div>
-            <fieldset :disabled="usernameExist||accountExist||!this.form[this.signupBy]">
+            <fieldset>
               <el-row>
                 <el-col :span="14">
                   <el-input v-model="form.code" placeholder="请输入内容"></el-input>
@@ -48,7 +48,7 @@
             </fieldset>
           </label>
           <label>
-            <button class="btn" type="submit">注册</button>
+            <button type="submit">注册</button>
           </label>
         </el-tabs>
       </form>
@@ -75,10 +75,9 @@ export default {
         rep_password: "",
         code: ""
       },
+      hideCaptcha: true,
       sendCodeCountDown: 0,
       error: [],
-      usernameExist: false,
-      accountExist: false,
       code: null,
       codeTimer: null
     };
@@ -87,8 +86,6 @@ export default {
     validate() {
       let f = this.form;
       let e = (this.error = []);
-      this.accountExist = false;
-      this.usernameExist = false;
 
       let signupBy = this.signupBy;
       //检查用户名 必填且不可短于6位
@@ -99,8 +96,6 @@ export default {
       //如果邮箱注册则检查邮箱 必填且正则验证
       if (signupBy == "mail" && (!f.mail || !is.mail(f.mail)))
         e.push({ mail: "邮箱格式有误" });
-      // 检查验证码 必填且不可短于6位
-      if (f.code != this.code) e.push({ code: "验证码有误" });
       //检查密码 必填且不可短于6位
       if (f.password.length < 6) e.push({ password: "密码不可短于6位" });
       //检查二次密码是否输入一致
@@ -111,45 +106,55 @@ export default {
         e.push({ rep_password: "请确认密码" });
       }
 
-      if (!f.username) return;
-      api("user/first", {
+      if (e.length == 0) return true;
+      else {
+        return false;
+      }
+    },
+
+    signup() {
+      if (!this.validate()) return;
+      let f = this.form;
+      let e = (this.error = []);
+
+      api("user/exists", {
         where: {
           and: {
             username: f.username
           }
         }
       }).then(r => {
-        if (r.data) {
+        if (r.data == true) {
           e.push({ username: "用户名已存在" });
-          this.usernameExist = true;
+          return;
+        } else {
+          api("user/exists", {
+            where: {
+              and: {
+                [this.signupBy]: f[this.signupBy]
+              }
+            }
+          }).then(r => {
+            if (r.data == true) {
+              e.push({ [this.signupBy]: "帐号已注册" });
+            } else {
+              this.hideCaptcha = false;
+              if (!f.code) {
+                e.push({ code: "请输入验证码" });
+                return;
+              } else if (f.code && f.code != this.code) {
+                e.push({ code: "验证码有误" });
+                return;
+              }
+              api("user/create", this.form).then(r => {
+                if (r.success) session.logIn(r.data.id, r.data);
+              });
+            }
+          });
         }
       });
-      if (this.usernameExist || !f[this.signupBy]) return;
-      //如果username不存在 再检查phone/mail 否则直接return
-      api("user/first", {
-        where: {
-          and: {
-            [this.signupBy]: f[this.signupBy]
-          }
-        }
-      }).then(r => {
-        if (r.data) {
-          e.push({ [this.signupBy]: "帐号已注册" });
-          this.accountExist = true;
-        }
-      });
-
-      if (e.length || this.accountExist) {
-        return false;
-      } else return true;
     },
 
-    signup() {
-      if (!this.validate()) return;
-      api("user/create", this.form).then(r => {
-        if (r.success) session.logIn(r.data.id, r.data);
-      });
-    },
     onCaptchaSend(code) {
       this.code = code;
     }

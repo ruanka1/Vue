@@ -14,7 +14,7 @@
         <div class="error">
           <!-- eslint-disable-next-line -->
         </div>
-        <button class="btn" type="submit" >登录</button>
+        <button type="submit">登录</button>
         <el-button type="text">
           <router-link to="/findback" class="forgetPassword">忘记密码？</router-link>
         </el-button>
