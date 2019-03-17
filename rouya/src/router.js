@@ -10,7 +10,6 @@ import Admin from './pages/admin/admin_base.vue'
 import Admin_User from './pages/admin/admin_user.vue'
 import Admin_Product from './pages/admin/admin_product.vue'
 import Admin_Order from './pages/admin/admin_order.vue'
-import Admin_Brand from './pages/admin/admin_brand.vue'
 import Admin_Cat from './pages/admin/admin_cat.vue'
 
 export default [{
@@ -40,9 +39,6 @@ export default [{
     }, {
         path: 'order',
         component: Admin_Order,
-    }, {
-        path: 'brand',
-        component: Admin_Brand,
     }, {
         path: 'cat',
         component: Admin_Cat,

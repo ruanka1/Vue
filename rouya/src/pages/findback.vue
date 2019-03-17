@@ -38,7 +38,7 @@
           <div v-for="it in error" :key="it.id">{{it}}</div>
         </div>
         <label>
-          <button class="btn" @click="nextStep()" type="button">确定</button>
+          <button @click="nextStep()" type="button">确定</button>
         </label>
       </form>
     </div>

@@ -70,7 +70,7 @@
         <el-col class="contact" :span="8">
           <div class="phone">0991-3671940</div>
           <div class="text">每日9:00-22:00在线服务</div>
-          <a class="btn" href="#">联系客服</a>
+          <a class="btn-box" href="#">联系客服</a>
         </el-col>
       </el-row>
     </div>
@@ -127,12 +127,12 @@
   font-size: 0.8rem;
   margin-bottom: 1.2rem;
 }
-.contact .btn {
+.contact .btn-box {
   color: #922b2f;
   border: 1px solid #922b2f;
   padding: 0.5rem 1.2rem;
 }
-.contact .btn:hover {
+.contact .btn-box:hover {
   background-color: #922b2f;
   color: #fff;
 }

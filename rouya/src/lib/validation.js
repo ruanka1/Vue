@@ -20,7 +20,7 @@ export let is = {
      * @param {number} value
      * @return {boolean}
      */
-    numeric(value) {
+    number(value) {
         if (!/^\d+$/.test(value.toString()))
             return false;
         return true;

@@ -107,8 +107,8 @@ export default {
       } else callback();
     };
     var checkMail = (rule, value, callback) => {
-      if (!this.form.mail && !this.form.mail) {
-        callback(new Error("请填写邮箱或邮箱"));
+      if (!this.form.phone && !this.form.mail) {
+        callback(new Error("请填写手机或邮箱"));
       } else if (value) {
         if (!is.mail(value)) {
           callback(new Error("邮箱格式有误"));
@@ -180,10 +180,11 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.form = {};
+      this.ui.showForm = false;
     },
     cancleEdit() {
-      this.ui.showForm = false;
       this.form = {};
+      this.ui.showForm = false;
     },
     read() {
       api("user/read", this.readParam).then(r => {
