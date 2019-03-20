@@ -4,19 +4,29 @@
     <div class="main">
       <div class="preview">
         <el-row class="container">
-          <el-col class="product-image" :span="8">
-            <el-carousel height="360px">
-              <el-carousel-item>
-                <img src="https://dummyimage.com/500x500">
+          <el-col class="product-image" :span="10">
+            <el-carousel height="400px">
+              <el-carousel-item v-for="it in row.main_img" :key="it.id">
+                <img :src="  'https://' + it._base_url + '/' + it._key">
               </el-carousel-item>
             </el-carousel>
           </el-col>
           <el-col class="product-info" :span="14">
-            <div class="product-name">新疆伊犁特产伊力特酒50度伊力柔雅蓝花瓷10十年500ML</div>
+            <div class="product-name">{{row.title}}</div>
             <div class="main-info">
-              <dl class="origin">
+              <div class="discount" v-if="row.discount&&row.discount!=1">
+                <dl>
+                  <dt class="title">价格</dt>
+                  <dd class="price origin-price">{{row.price}}</dd>
+                </dl>
+                <dl>
+                  <dt class="title">优惠价</dt>
+                  <dd class="price discount-price">{{Math.floor(row.price*row.discount)}}</dd>
+                </dl>
+              </div>
+              <dl class="origin" v-else>
                 <dt class="title">价格</dt>
-                <dd class="price">999</dd>
+                <dd class="price">{{row.price}}</dd>
               </dl>
               <dl class="service">
                 <dt class="title">本店活动</dt>
@@ -24,14 +34,14 @@
               </dl>
               <dl class="carriage">
                 <dt class="title">运费</dt>
-                <dd class="price">10</dd>
+                <dd class="price">{{row.carriage}}</dd>
               </dl>
             </div>
             <div class="other-info">
               <el-row class="sales">
                 <el-col :span="8">
                   <span class="title">月销量</span>
-                  <span class="amount">999</span>
+                  <span class="amount">{{row.sales?row.sales:'0'}}</span>
                 </el-col>
                 <el-col :span="8">
                   <span class="title">好评数</span>
@@ -43,49 +53,40 @@
                 </el-col>
               </el-row>
             </div>
-            <div class="caution">
-              <div class="prop-option">
+            <div :class="caution?'caution':''">
+              <div class="prop-option" v-for="(item,key) in row.prop" :key="(item,key)">
                 <dl class="prop">
-                  <dt class="title">属性名1</dt>
-                  <button class="prop-button selected">属性值1</button>
-                  <button class="prop-button">属性值2</button>
-                  <button class="prop-button">属性值3</button>
+                  <dt class="title">{{key}}</dt>
+                  <button
+                    :class=" 'prop-button ' + (form.prop[key]===it ? 'selected' : '')"
+                    @click="setProp(key,it)"
+                    v-for="it in item"
+                    :key="it"
+                  >{{it}}</button>
                 </dl>
               </div>
             </div>
             <div class="other-option">
               <dl class="amount">
                 <dt class="title">数量</dt>
-                <el-input-number :min="1" :max="999" size="mini"></el-input-number>
+                <el-input-number v-model="form.count" :min="1" :max="row.stock" size="mini"></el-input-number>
                 <dt class="remain">
                   库存
-                  <span>999</span>
+                  <span>{{row.stock}}</span>
                 </dt>
               </dl>
             </div>
             <div class="main-button">
-              <button class="buy">立即购买</button>
-              <button class="add-cart">加入购物车</button>
+              <button class="buy" @click="confirmOrder()">立即购买</button>
+              <button class="add-cart" @click="addToShopCart()">加入购物车</button>
             </div>
-            <div class="other-option promise">
+            <div class="promise">
               <dl>
                 <dt>服务承诺</dt>
                 <a class="item" href="#">正品保障</a>
                 <a class="item" href="#">破损包退</a>
                 <a class="item" href="#">假一赔十</a>
               </dl>
-            </div>
-          </el-col>
-          <el-col class="side" :span="2">
-            <div class="side-item">
-              <div class="img-box">
-                <a target="_blank">
-                  <img class="side-img" src="https://dummyimage.com/100x100">
-                </a>
-                <span class="tag">热卖</span>
-                <p class="side-price price">99</p>
-              </div>
-              <a class="side-title" target="_blank">伊力柔雅青翠5号白酒 浓香型 50度500克 粮食白酒</a>
             </div>
           </el-col>
         </el-row>
@@ -104,9 +105,17 @@
             <span class="item" :span="8">...</span>
             <span class="item" :span="8">...</span>
           </div>
-          <div class="img">
-            <div>
-              <img src="https://dummyimage.com/1080x500">
+          <div v-if="!row.detail">
+            <img src="https://dummyimage.com/1080x500">
+          </div>
+          <div v-else v-for="it in row.detail" :key="it.id">
+            <div class="part" v-if="it.type==='text'">
+              <div class="text">{{it.value}}</div>
+            </div>
+            <div class="part" v-else>
+              <div class="img">
+                <img :src="'https://' + it.value._base_url + '/' + it.value._key">
+              </div>
             </div>
           </div>
         </div>
@@ -119,9 +128,108 @@
 <script>
 import GlobalHeader from "../components/global_header.vue";
 import Service from "../components/service.vue";
+import api from "../lib/api.js";
+import session from "../lib/session.js";
+import { createOrder } from "../lib/create_order.js";
+import { mapActions } from "vuex";
 
 export default {
-  components: { GlobalHeader, Service }
+  components: { GlobalHeader, Service },
+  data() {
+    return {
+      row: {
+        id: null
+      },
+      form: {
+        count: 1,
+        prop: {}
+      },
+      caution: false
+    };
+  },
+  mounted() {
+    this.row.id = this.$route.params.id;
+    this.find();
+  },
+  methods: {
+    ...mapActions(["addToCart"]),
+
+    find() {
+      this.disableBtn = false;
+      api("product/find", this.row).then(r => {
+        this.row = r.data;
+        this.handleProp();
+      });
+    },
+    handleProp() {
+      let p = this.row.prop;
+      let propValue = {};
+      for (let key in p) {
+        let options = p[key];
+        propValue[key] = options.split("|");
+      }
+      this.$set(this.row, "prop", propValue);
+    },
+
+    addToShopCart() {
+      if (session.isAdmin()) {
+        alert("管理员别闹");
+        return;
+      }
+      if (!this.allPropSelected()) {
+        this.caution = true;
+        return;
+      }
+
+      let product = {
+        product_id: this.row.id,
+        count: this.form.count,
+        product_snapshoot: this.row,
+        prop: this.form.prop
+      };
+      if (session.loggedIn()) product.user_id = session.user("id");
+
+      this.addToCart(product);
+
+      this.caution = false;
+    },
+
+    confirmOrder() {
+      this.caution = false;
+      if (!session.loggedIn()) {
+        this.$router.push("/login");
+        return;
+      }
+      if (session.isAdmin()) {
+        alert("管理员别闹");
+        return;
+      }
+      if (!this.allPropSelected()) {
+        this.caution = true;
+        return;
+      }
+      this.form.product_id = this.row.id;
+      //创建商品快照
+      this.form.product_snapshoot = this.row;
+
+      createOrder([this.form], session.user("id")).then(r => {
+        {
+          this.$router.push(`/order/${r.data.id}`);
+        }
+      });
+    },
+    //检查属性是否全选
+    allPropSelected() {
+      let p = this.row.prop;
+      for (let key in p) {
+        if (!this.form.prop[key]) return false;
+      }
+      return true;
+    },
+    setProp(key, value) {
+      this.$set(this.form.prop, key, value);
+    }
+  }
 };
 </script>
 
@@ -140,15 +248,25 @@ export default {
   padding: 0 1rem;
 }
 .product-name {
-  padding: 0 0.5rem;
+  padding-bottom: 0.5rem;
   font-size: 1.3rem;
   font-weight: bold;
 }
 .main-info {
-  padding: 0 0.8rem;
+  padding: 0.5rem 0.8rem;
+  background-image: url("../img/bg.png");
+}
+.main-info > * {
+  padding-bottom: 0.5rem;
+}
+.main-info > :last-child {
+  padding: 0;
 }
 dl > * {
   display: inline-block;
+}
+dl {
+  margin: 0;
 }
 dl dt {
   width: 15%;
@@ -162,10 +280,14 @@ dl dd {
 .price:before {
   content: "￥";
 }
-.main-info .origin .price {
+.main-info .origin .price,
+.main-info .discount-price {
   color: #ff0036;
   font-weight: bold;
   font-size: 1.5rem;
+}
+.main-info .discount .origin-price {
+  text-decoration: line-through;
 }
 .main-info .service .text {
   color: rgba(0, 0, 0, 0.5);
@@ -173,10 +295,14 @@ dl dd {
   font-weight: bold;
 }
 .other-info {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
+.other-option {
+  margin-top: 1rem;
 }
 .other-info .carriage,
-.other-option {
+.other-option,
+.promise {
   padding: 0 0.8rem;
 }
 .other-info .sales {
@@ -209,11 +335,10 @@ dl dd {
   outline: 1px solid #ff0036;
 }
 .prop-option .prop {
+  padding-top: 0.5rem;
   padding-left: 0.5rem;
 }
-.prop-option:first-of-type .prop {
-  padding-top: 0.5rem;
-}
+
 .prop-option:last-of-type .prop {
   padding-bottom: 0.5rem;
 }
@@ -254,45 +379,6 @@ dl dd {
   color: #999;
   margin-right: 1rem;
 }
-.side-item {
-  margin-bottom: 1rem;
-  text-align: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.side-item .side-title {
-  font-size: 0.8rem;
-}
-.side-item .img-box {
-  position: relative;
-}
-
-.side-item .tag {
-  position: absolute;
-  top: 0;
-  left: 30%;
-  padding: 0.1rem 0.3rem;
-  background-color: #ff0036;
-  color: #fff;
-  font-size: 0.5rem;
-}
-.side-item .side-price {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  margin: 0;
-  text-align: center;
-  background-color: rgba(255, 255, 255, 0.7);
-  color: #ff0036;
-  font-weight: bold;
-}
-.side-item .side-title {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
-  vertical-align: middle;
-}
 .detail .list {
   padding: 1rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -311,7 +397,11 @@ dl dd {
   margin-right: 1rem;
 }
 .detail .part {
-  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #fff;
+}
+.detail .part .img {
+  text-align: center;
 }
 /* 轮播样式开始 */
 .el-carousel__item h3 {

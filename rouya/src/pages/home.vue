@@ -4,8 +4,16 @@
     <div class="first-screen">
       <div class="slide">
         <el-row class="container">
-          <el-carousel :interval="4000" type="card" height="300px">
-            <el-carousel-item v-for="item in 5" :key="item"></el-carousel-item>
+          <el-carousel :interval="3000" type="card" height="300px">
+            <el-carousel-item v-for="it in slideProduct_list" :key="it.id">
+              <router-link :to="`/product/${it.id}`">
+                <img
+                  v-if="it.slide_img"
+                  :src="'https://' + it.slide_img._base_url + '/' + it.slide_img._key"
+                >
+                <img src="https://dummyimage.com/600x300">
+              </router-link>
+            </el-carousel-item>
           </el-carousel>
         </el-row>
       </div>
@@ -34,18 +42,26 @@
             </span>
           </div>
           <el-row class="card-group" :gutter="20">
-            <el-col class="new-list single-card" :span="6">
+            <el-col
+              class="new-list single-card"
+              v-for="it in newProduct_list"
+              :key="it.id"
+              :span="6"
+            >
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
-                <a>
-                  <img src="https://dummyimage.com/300x300">
-                </a>
+                <router-link :to="`/product/${it.id}`">
+                  <div v-if="it.main_img">
+                    <img :src="'https://' + it.main_img[0]._base_url + '/' + it.main_img[0]._key">
+                  </div>
+                  <div v-else>
+                    <img src="https://dummyimage.com/275x165">
+                  </div>
+                </router-link>
                 <div style="padding: 14px;">
-                  <a>
-                    <span
-                      class="product-title"
-                    >Lorem ipsum dolor sit amet consectetur adipisicing elit</span>
-                  </a>
-                  <div class="product-price">￥999</div>
+                  <router-link :to="`/product/${it.id}`">
+                    <span class="product-title">{{it.title}}</span>
+                  </router-link>
+                  <div class="product-price">￥{{it.price}}</div>
                 </div>
               </el-card>
             </el-col>
@@ -61,18 +77,21 @@
             </span>
           </div>
           <el-row class="card-group" :gutter="20">
-            <el-col class="hot-list single-card" :span="6">
+            <el-col
+              class="hot-list single-card"
+              v-for="it in hotProduct_list"
+              :key="it.id"
+              :span="6"
+            >
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
-                <a>
-                  <img src="https://dummyimage.com/300x300">
-                </a>
+                <router-link :to="`/product/${it.id}`">
+                  <img :src="'https://' + it.main_img[0]._base_url + '/' + it.main_img[0]._key">
+                </router-link>
                 <div style="padding: 14px;">
-                  <a>
-                    <span
-                      class="product-title"
-                    >Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam deserunt minus, dolores accusamus aperiam fugiat voluptas officiis omnis delectus dicta, porro incidunt maiores, reiciendis explicabo temporibus ex quis repellendus architecto.</span>
-                  </a>
-                  <div class="product-price">￥999</div>
+                  <router-link :to="`/product/${it.id}`">
+                    <span class="product-title">{{it.title}}</span>
+                  </router-link>
+                  <div class="product-price">￥{{it.price}}</div>
                 </div>
               </el-card>
             </el-col>
@@ -87,9 +106,31 @@
 <script>
 import GlobalHeader from "../components/global_header.vue";
 import Service from "../components/service.vue";
+import api from "../lib/api.js";
 
 export default {
-  components: { GlobalHeader, Service }
+  components: { GlobalHeader, Service },
+  data() {
+    return {
+      newProduct_list: [],
+      hotProduct_list: [],
+      slideProduct_list: []
+    };
+  },
+  mounted() {
+    this.read("new");
+    this.read("hot");
+    this.read("slide");
+  },
+  methods: {
+    read(type) {
+      api("product/read", {
+        where: { and: { [type + "_product"]: true } }
+      }).then(r => {
+        this[type + "Product_list"] = r.data;
+      });
+    }
+  }
 };
 </script>
 
@@ -137,12 +178,14 @@ h2 {
   -webkit-line-clamp: 2;
   overflow: hidden;
   vertical-align: middle;
+  text-align: center;
+  font-weight: bold;
 }
 .long-image-banner {
   margin: 1rem auto;
 }
 .product-price {
-  padding-top: 1rem;
+  padding-top: 0.5rem;
   color: #e10;
   text-align: center;
   font-weight: bold;

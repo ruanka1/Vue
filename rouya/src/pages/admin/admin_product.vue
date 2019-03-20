@@ -54,6 +54,7 @@
                 v-if="form.slide_img"
                 :src="'https://' + form.slide_img._base_url + '/' + form.slide_img._key"
               >
+              <button @click="removeSlideImg()" type="button">删除</button>
             </el-col>
           </el-row>
         </el-form-item>
@@ -77,9 +78,10 @@
         </el-form-item>
 
         <el-form-item class="item" label="上传商品图片" :gutter="10">
-          <Uploader class="uploader" @uploadSuccess="singleImgUpload" :autoUpload="true"/>
-          <el-col class="wrapper" :span="8" v-for="it in form.main_img" :key="it.value">
+          <Uploader class="uploader" @uploadSuccess="mainImgUpload" :autoUpload="true"/>
+          <el-col class="wrapper" :span="8" v-for="(it,key) in form.main_img" :key="(it,key)">
             <img :src="'https://' + it._base_url + '/' + it._key">
+            <button @click="removeMainImg(key)" type="button">删除</button>
           </el-col>
         </el-form-item>
 
@@ -112,19 +114,23 @@
     </div>
     <div class="list">
       <el-table :data="list" style="width: 100%">
-        <el-table-column label="图片" width="100">
+        <el-table-column label="图片" width="120">
           <template slot-scope="scope">
-            <img src="https://dummyimage.com/100x100 ">
+            <div v-if="scope.row.main_img&&scope.row.main_img.length!=0">
+              <img
+                :src=" 
+              'https://' + scope.row.main_img[0]._base_url + '/' + scope.row.main_img[0]._key "
+              >
+            </div>
+            <div v-else>暂无图片</div>
           </template>
         </el-table-column>
-        <el-table-column prop="title" label="商品名称" width="280"></el-table-column>
-        <el-table-column prop="price" label="原价" width="70"></el-table-column>
-        <!-- <el-table-column label="售价" width="70">
-          <template slot-scope="scope">{{scope.row.price*scope.row.discount}}</template>
-        </el-table-column>-->
-        <el-table-column prop="carriage" label="运费" width="60"></el-table-column>
-        <el-table-column prop="stock" label="库存" width="70"></el-table-column>
-        <el-table-column prop="$cat.catname" label="分类" width="120"></el-table-column>
+        <el-table-column prop="title" label="商品名称" width="220"></el-table-column>
+        <el-table-column prop="price" label="原价" width="80"></el-table-column>
+
+        <el-table-column prop="carriage" label="运费" width="80"></el-table-column>
+        <el-table-column prop="stock" label="库存" width="80"></el-table-column>
+        <el-table-column prop="catname" label="分类" width="200"></el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
             <el-button @click="fill(scope.row)" type="text" size="small">更新</el-button>
@@ -271,9 +277,15 @@ export default {
     slideImgUpload(data) {
       this.form.slide_img = data;
     },
-    singleImgUpload(data) {
+    removeSlideImg() {
+      this.form.slide_img = null;
+    },
+    mainImgUpload(data) {
       if (!this.form.main_img) this.$set(this.form, "main_img", []);
       this.form.main_img.push(data);
+    },
+    removeMainImg(index) {
+      this.form.main_img.splice(index, 1);
     },
     inertDes(type) {
       if (!this.form.detail) this.$set(this.form, "detail", []);

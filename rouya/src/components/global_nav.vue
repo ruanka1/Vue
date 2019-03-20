@@ -11,9 +11,11 @@
           <a href="#">周边服务</a>
         </el-col>
         <el-col class="nav-right" :span="12">
-          <a>购物车</a>
+          <el-badge class="item" :value="cartList.length">
+            <a @click="cartVisible=!cartVisible">购物车</a>
+          </el-badge>
           <span v-if="session.loggedIn()&&!session.isAdmin()">
-            <a>{{session.user('username')}}</a>
+            <router-link to="/my">{{session.user('username')}}</router-link>
             <a class="logout" @click="session.logOut()">登出</a>
           </span>
           <span v-else-if="session.loggedIn()&&session.isAdmin()">
@@ -27,17 +29,25 @@
         </el-col>
       </el-row>
     </div>
+    <Cart @hideCart="cartVisible=false" v-show="cartVisible"/>
   </div>
 </template>
 
 <script>
 import session from "../lib/session.js";
+import Cart from "./cart.vue";
+import { mapGetters } from "vuex";
 
 export default {
+  components: { Cart },
   data() {
     return {
-      session
+      session,
+      cartVisible: false
     };
+  },
+  computed: {
+    ...mapGetters(["cartList"])
   }
 };
 </script>
@@ -67,5 +77,10 @@ export default {
 .logout {
   text-decoration: none;
   cursor: pointer;
+}
+.el-badge {
+  display: inline-block;
+  margin: 0;
+  vertical-align: top;
 }
 </style>

@@ -1,10 +1,15 @@
 import Home from "./pages/home.vue"
 
 import Product from "./pages/product.vue"
+import Order from "./pages/order.vue"
 
 import Signup from './pages/signup.vue'
 import Login from './pages/login.vue'
 import Findback from './pages/findback.vue'
+
+import My from './pages/my/my_base.vue'
+import My_Order from './pages/my/my_order.vue'
+import My_Setting from './pages/my/my_setting.vue'
 
 import Admin from './pages/admin/admin_base.vue'
 import Admin_User from './pages/admin/admin_user.vue'
@@ -27,6 +32,20 @@ export default [{
 }, {
     path: '/product/:id',
     component: Product
+}, {
+    path: '/order/:id',
+    component: Order
+}, {
+    path: '/my',
+    component: My,
+    children: [{
+        path: 'order',
+        component: My_Order
+    }, {
+        path: 'setting',
+        component: My_Setting,
+    }],
+    redirect: '/my/order'
 }, {
     path: '/admin',
     component: Admin,

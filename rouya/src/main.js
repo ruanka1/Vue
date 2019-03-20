@@ -2,6 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import "./css/base.css"
 
+import {
+  store
+} from "./store/index.js"
+
 import session from "./lib/session"
 import api from "./lib/api"
 window.api = api
@@ -19,6 +23,7 @@ const router = new Router({
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')
 
@@ -29,6 +34,18 @@ router.beforeEach((to, from, next) => {
     //判断访问者身份是否为管理员
     if (session.isAdmin())
       //如果为true则允许访问 如果为false则禁止访问
+      next();
+    next(false)
+  } else {
+    next()
+  }
+})
+
+//个人页路由验证
+router.beforeEach((to, from, next) => {
+  let toMy = to.matched[0].path == '/my';
+  if (toMy) {
+    if (session.loggedIn() && !session.isAdmin())
       next();
     next(false)
   } else {
