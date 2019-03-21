@@ -8,17 +8,34 @@
           </router-link>
         </el-col>
         <el-col class="search-bar" :span="19">
-          <form>
-            <input type="search">
-            <button type="submit">
-              <i class="el-icon-search"></i>
-            </button>
+          <form class="search" @submit.prevent="toSearch()">
+            <el-input v-model="searchForm.keyword" placeholder="请输入内容" prefix-icon="el-icon-search"></el-input>
+            <button type="submit" hidden></button>
           </form>
         </el-col>
       </el-row>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      searchForm: {}
+    };
+  },
+  methods: {
+    toSearch() {
+      this.$router.push({
+        path: "/search",
+        query: this.searchForm
+      });
+    }
+  }
+};
+</script>
+
 
 <style scoped>
 .header {
@@ -37,11 +54,11 @@
   width: 70%;
   border-radius: 4px 0 0 4px;
   border-right: 0;
-  padding: .8rem 1rem;
+  padding: 0.8rem 1rem;
 }
 .search-bar button {
   border-radius: 0 4px 4px 0;
-  padding: .8rem 1.5rem;
+  padding: 0.8rem 1.5rem;
 }
 </style>
 

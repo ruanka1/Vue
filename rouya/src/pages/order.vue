@@ -55,7 +55,7 @@
               <el-col :span="3">单价</el-col>
               <el-col :span="2">数量</el-col>
               <el-col :span="2">运费</el-col>
-              <el-col :span="3">小计</el-col>
+              <el-col :span="3">总计</el-col>
             </el-row>
             <el-row class="content" :gutter="10">
               <el-col class="item" :span="2">
@@ -74,7 +74,7 @@
               <el-col class="item" :span="5">
                 <span v-if="!it.prop">-</span>
                 <span v-else>
-                  <span v-for="item in it.prop" :key="item.id">{{item}}-</span>
+                  <span v-for="item in it.prop" :key="item.id">{{item}} </span>
                 </span>
               </el-col>
               <el-col class="item" :span="3">

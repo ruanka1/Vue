@@ -1,5 +1,5 @@
 import axios from "axios";
-let appKey = 'c6f6e8807f7c5e42bba17cdb31d8cd410b8976e95b8dcb909ceef85604151c7f';
+let appKey = '698087d1454e28e01c74d6f072cdafc2da99b463adcd3c1cc6c011addef376a6';
 export default function api(url, data) {
     let timestamp = Date.now();
     return axios.post(`https://mock.biaoyansu.com/api/1/${url}`, data, {

@@ -1,5 +1,6 @@
 import store from "../../lib/localstorage"
 
+
 const state = {
   cartList: store.get('cart') || []
 };
@@ -62,7 +63,7 @@ const mutations = {
     if (!flag) {
       state.cartList.push(product);
     }
-    store.set('cart', state.cartList || {})
+    store.set('cart', state.cartList || [])
   },
 
   update(state, {

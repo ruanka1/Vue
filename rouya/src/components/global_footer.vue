@@ -4,11 +4,11 @@
       <el-row>
         <el-col class="left" :span="18">
           <div class="link-group">
-            <a class="link-item">联系我们</a>
-            <a class="link-item">合作招商</a>
-            <a class="link-item">招贤纳士</a>
-            <a class="link-item">真伪查询</a>
-            <a class="link-item">打假维权</a>
+            <a class="link-item" href="#">联系我们</a>
+            <a class="link-item" href="#">合作招商</a>
+            <a class="link-item" href="#">招贤纳士</a>
+            <a class="link-item" href="#">真伪查询</a>
+            <a class="link-item" href="#">打假维权</a>
           </div>
           <div class="meta-info">
             <p>Copyright 2018-2019 ©乌鲁木齐市玖广源商贸有限公司</p>

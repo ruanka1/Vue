@@ -11,7 +11,6 @@
                   v-if="it.slide_img"
                   :src="'https://' + it.slide_img._base_url + '/' + it.slide_img._key"
                 >
-                <img src="https://dummyimage.com/600x300">
               </router-link>
             </el-carousel-item>
           </el-carousel>
@@ -22,10 +21,34 @@
           <el-row class="short-group" :gutter="20">
             <el-col class="single-shortcut" :span="6">
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
-                <img src="https://dummyimage.com/253x152" class="image">
-                <div style="padding: 14px;">
-                  <span>Lorem ipsum dolor sit amet consectetur adipisicing elit</span>
-                </div>
+                <img
+                  src="https://mock-cdn.biaoyansu.com/MOCK-FILE-5c93a6d89f6664.55775665.gif"
+                  class="image"
+                >
+              </el-card>
+            </el-col>
+            <el-col class="single-shortcut" :span="6">
+              <el-card :body-style="{ padding: '0px' }" shadow="hover">
+                <img
+                  src="https://mock-cdn.biaoyansu.com/MOCK-FILE-5c93a4cd6bb2e4.74187379.gif"
+                  class="image"
+                >
+              </el-card>
+            </el-col>
+            <el-col class="single-shortcut" :span="6">
+              <el-card :body-style="{ padding: '0px' }" shadow="hover">
+                <img
+                  src="https://mock-cdn.biaoyansu.com/MOCK-FILE-5c93aa6f3a36b2.40978679.png"
+                  class="image"
+                >
+              </el-card>
+            </el-col>
+            <el-col class="single-shortcut" :span="6">
+              <el-card :body-style="{ padding: '0px' }" shadow="hover">
+                <img
+                  src="https://mock-cdn.biaoyansu.com/MOCK-FILE-5c93aa6aaf3768.41041496.gif"
+                  class="image"
+                >
               </el-card>
             </el-col>
           </el-row>
@@ -37,9 +60,6 @@
         <div class="container">
           <div class="title">
             <h2>新品</h2>
-            <span class="more">
-              <a class="fr" href="#">查看更多</a>
-            </span>
           </div>
           <el-row class="card-group" :gutter="20">
             <el-col
@@ -61,7 +81,7 @@
                   <router-link :to="`/product/${it.id}`">
                     <span class="product-title">{{it.title}}</span>
                   </router-link>
-                  <div class="product-price">￥{{it.price}}</div>
+                  <div class="product-price">￥{{Math.floor(it.price*(it.discount||1))}}</div>
                 </div>
               </el-card>
             </el-col>
@@ -72,9 +92,6 @@
         <div class="container">
           <div class="title">
             <h2>热销</h2>
-            <span class="more">
-              <a class="fr" href="#">查看更多</a>
-            </span>
           </div>
           <el-row class="card-group" :gutter="20">
             <el-col
@@ -91,7 +108,7 @@
                   <router-link :to="`/product/${it.id}`">
                     <span class="product-title">{{it.title}}</span>
                   </router-link>
-                  <div class="product-price">￥{{it.price}}</div>
+                  <div class="product-price">￥{{Math.floor(it.price*(it.discount||1))}}</div>
                 </div>
               </el-card>
             </el-col>

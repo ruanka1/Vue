@@ -28,9 +28,9 @@
         <el-form-item label="商品销量" prop="sales">
           <el-input v-model="form.sales"></el-input>
         </el-form-item>
-        <el-form-item label="商品分类" prop="catname">
-          <el-select v-model="form.catname" placeholder="请选择商品分类">
-            <el-option v-for="it in catList" :key="it.id" :value="it.catname">{{it.catname}}</el-option>
+        <el-form-item label="商品分类" prop="cat_id">
+          <el-select v-model="form.cat_id" placeholder="请选择商品分类">
+            <el-option v-for="it in catList" :key="it.id" :value="it.id" :label="it.catname"></el-option>
           </el-select>
         </el-form-item>
 
@@ -127,10 +127,9 @@
         </el-table-column>
         <el-table-column prop="title" label="商品名称" width="220"></el-table-column>
         <el-table-column prop="price" label="原价" width="80"></el-table-column>
-
         <el-table-column prop="carriage" label="运费" width="80"></el-table-column>
         <el-table-column prop="stock" label="库存" width="80"></el-table-column>
-        <el-table-column prop="catname" label="分类" width="200"></el-table-column>
+        <el-table-column prop="$cat.catname" label="分类" width="200"></el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
             <el-button @click="fill(scope.row)" type="text" size="small">更新</el-button>
@@ -181,7 +180,7 @@ export default {
           if (value < 0) callback(new Error("运费不可小于0"));
           else callback();
         } else callback(new Error("格式有误"));
-      } else callback();
+      } else callback(new Error("请输入商品运费"));
     };
     var checkInteger = (rule, value, callback) => {
       if (value) {
@@ -189,8 +188,8 @@ export default {
         if (typeof value === "number" && !isNaN(value) && value % 1 === 0) {
           if (value < 0) callback(new Error("不可小于0"));
           else callback();
-        } else callback(new Error("格式有误"));
-      } else callback();
+        } else callback(new Error("格式有误 请输入整数"));
+      } else callback(new Error("不可为空"));
     };
     return {
       ui: {
@@ -198,7 +197,8 @@ export default {
       },
       readParam: {
         limit: 10,
-        page: 1
+        page: 1,
+        with: ["belongs_to:cat"]
       },
       total: 0,
       list: [],
@@ -222,8 +222,8 @@ export default {
         carriage: [{ validator: checkCarriage, trigger: "change" }],
         stock: [{ validator: checkInteger, trigger: "change" }],
         sales: [{ validator: checkInteger, trigger: "change" }],
-        catname: [
-          { required: true, message: "请输入商品分类", trigger: "change" }
+        cat_id: [
+          { required: true, message: "请选择商品分类", trigger: "change" }
         ]
       }
     };

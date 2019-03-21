@@ -2,6 +2,7 @@ import Home from "./pages/home.vue"
 
 import Product from "./pages/product.vue"
 import Order from "./pages/order.vue"
+import Search from "./pages/search.vue"
 
 import Signup from './pages/signup.vue'
 import Login from './pages/login.vue'
@@ -35,6 +36,9 @@ export default [{
 }, {
     path: '/order/:id',
     component: Order
+}, {
+    path: '/search',
+    component: Search
 }, {
     path: '/my',
     component: My,

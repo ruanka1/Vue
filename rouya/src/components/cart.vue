@@ -62,6 +62,7 @@ export default {
   },
   methods: {
     ...mapActions(["updateProduct", "removeProduct", "clearCart"]),
+
     remove(id, index) {
       this.cartList.splice(index, 1);
       this.removeProduct(id);

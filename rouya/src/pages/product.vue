@@ -5,7 +5,7 @@
       <div class="preview">
         <el-row class="container">
           <el-col class="product-image" :span="10">
-            <el-carousel height="400px">
+            <el-carousel height="250px">
               <el-carousel-item v-for="it in row.main_img" :key="it.id">
                 <img :src="  'https://' + it._base_url + '/' + it._key">
               </el-carousel-item>
@@ -21,7 +21,7 @@
                 </dl>
                 <dl>
                   <dt class="title">优惠价</dt>
-                  <dd class="price discount-price">{{Math.floor(row.price*row.discount)}}</dd>
+                  <dd class="price discount-price">{{Math.floor(row.price*(row.discount||1))}}</dd>
                 </dl>
               </div>
               <dl class="origin" v-else>
@@ -54,7 +54,7 @@
               </el-row>
             </div>
             <div :class="caution?'caution':''">
-              <div class="prop-option" v-for="(item,key) in row.prop" :key="(item,key)">
+              <div class="prop-option" v-for="(item,key) in row.prop" :key="item.value">
                 <dl class="prop">
                   <dt class="title">{{key}}</dt>
                   <button
@@ -93,31 +93,38 @@
       </div>
       <div class="detail">
         <div class="container">
-          <div class="list">
-            <div>详细参数</div>
-            <span class="item" :span="8">...</span>
-            <span class="item" :span="8">...</span>
-            <span class="item" :span="8">...</span>
-            <span class="item" :span="8">...</span>
-            <span class="item" :span="8">...</span>
-            <span class="item" :span="8">...</span>
-            <span class="item" :span="8">...</span>
-            <span class="item" :span="8">...</span>
-            <span class="item" :span="8">...</span>
-          </div>
-          <div v-if="!row.detail">
-            <img src="https://dummyimage.com/1080x500">
-          </div>
-          <div v-else v-for="it in row.detail" :key="it.id">
-            <div class="part" v-if="it.type==='text'">
-              <div class="text">{{it.value}}</div>
-            </div>
-            <div class="part" v-else>
-              <div class="img">
-                <img :src="'https://' + it.value._base_url + '/' + it.value._key">
+          <el-tabs type="border-card">
+            <el-tab-pane label="商品详情">
+              <div class="list">
+                <div>详细参数</div>
+                <span class="item" :span="8">...</span>
+                <span class="item" :span="8">...</span>
+                <span class="item" :span="8">...</span>
+                <span class="item" :span="8">...</span>
+                <span class="item" :span="8">...</span>
+                <span class="item" :span="8">...</span>
+                <span class="item" :span="8">...</span>
+                <span class="item" :span="8">...</span>
+                <span class="item" :span="8">...</span>
               </div>
-            </div>
-          </div>
+              <div v-if="!row.detail">
+                <img src="https://dummyimage.com/1080x500">
+              </div>
+              <div v-else v-for="it in row.detail" :key="it.id">
+                <div class="part" v-if="it.type==='text'">
+                  <div class="text">{{it.value}}</div>
+                </div>
+                <div class="part" v-else>
+                  <div class="img">
+                    <img :src="'https://' + it.value._base_url + '/' + it.value._key">
+                  </div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="规格参数"></el-tab-pane>
+            <el-tab-pane label="累计评价"></el-tab-pane>
+            <el-tab-pane label="售后服务"></el-tab-pane>
+          </el-tabs>
         </div>
       </div>
       <Service/>
@@ -241,7 +248,6 @@ export default {
   background-color: #fff;
 }
 .detail {
-  background-color: #f9f9f9;
   padding: 1rem 0;
 }
 .product-info {
@@ -298,12 +304,12 @@ dl dd {
   margin-bottom: 0.5rem;
 }
 .other-option {
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 .other-info .carriage,
 .other-option,
 .promise {
-  padding: 0 0.8rem;
+  padding: 0 0.5rem;
 }
 .other-info .sales {
   text-align: center;
@@ -362,7 +368,7 @@ dl dd {
 
 .main-button {
   margin: 1rem 0;
-  padding-left: 16.5%;
+  padding-left: 16%;
 }
 .main-button > button {
   font-size: 1rem;
@@ -402,6 +408,9 @@ dl dd {
 }
 .detail .part .img {
   text-align: center;
+}
+.el-tabs--border-card {
+  box-shadow: none;
 }
 /* 轮播样式开始 */
 .el-carousel__item h3 {
