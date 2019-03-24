@@ -125,11 +125,18 @@
             <div v-else>暂无图片</div>
           </template>
         </el-table-column>
-        <el-table-column prop="title" label="商品名称" width="220"></el-table-column>
+        <el-table-column prop="title" label="商品名称" width="220">
+          <template slot-scope="scope">
+            <router-link :to="`/product/${scope.row.id}`">{{scope.row.title}}</router-link>
+          </template>
+        </el-table-column>
         <el-table-column prop="price" label="原价" width="80"></el-table-column>
+        <el-table-column label="售价" width="80">
+          <template slot-scope="scope">{{(scope.row.price*(scope.row.discount||1)).toFixed(2)}}</template>
+        </el-table-column>
         <el-table-column prop="carriage" label="运费" width="80"></el-table-column>
-        <el-table-column prop="stock" label="库存" width="80"></el-table-column>
-        <el-table-column prop="$cat.catname" label="分类" width="200"></el-table-column>
+        <el-table-column prop="stock" label="库存" width="60"></el-table-column>
+        <el-table-column prop="$cat.catname" label="分类" width="140"></el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
             <el-button @click="fill(scope.row)" type="text" size="small">更新</el-button>

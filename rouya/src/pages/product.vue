@@ -7,7 +7,10 @@
           <el-col class="product-image" :span="10">
             <el-carousel height="250px">
               <el-carousel-item v-for="it in row.main_img" :key="it.id">
-                <img :src="  'https://' + it._base_url + '/' + it._key">
+                <img
+                  :src="  'https://' + it._base_url + '/' + it._key"
+                  style="width:450px;height:260px"
+                >
               </el-carousel-item>
             </el-carousel>
           </el-col>
@@ -21,7 +24,7 @@
                 </dl>
                 <dl>
                   <dt class="title">优惠价</dt>
-                  <dd class="price discount-price">{{Math.floor(row.price*(row.discount||1))}}</dd>
+                  <dd class="price discount-price">{{(row.price*row.discount).toFixed(2)}}</dd>
                 </dl>
               </div>
               <dl class="origin" v-else>

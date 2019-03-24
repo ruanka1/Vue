@@ -9,7 +9,11 @@
         </el-col>
         <el-col class="search-bar" :span="19">
           <form class="search" @submit.prevent="toSearch()">
-            <el-input v-model="searchForm.keyword" placeholder="请输入内容" prefix-icon="el-icon-search"></el-input>
+            <el-input
+              v-model="searchForm.keyword"
+              placeholder="请输入关键词 如:伊力"
+              prefix-icon="el-icon-search"
+            ></el-input>
             <button type="submit" hidden></button>
           </form>
         </el-col>

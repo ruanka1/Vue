@@ -4,7 +4,7 @@ export function createOrder(detail, user_id) {
     let order = {
         detail
     };
-    order.sum = orderSum(order.detail);
+    order.sum = (orderSum(order.detail)).toFixed(2);
     order.user_id = user_id;
     order.created_at = orderCreatedTime();
 
@@ -38,7 +38,7 @@ export function orderSum(detail) {
     let sum = 0;
     detail.forEach(element => {
         sum +=
-            element.product_snapshoot.price * element.count +
+            element.product_snapshoot.price * (element.product_snapshoot.discount || 1) * element.count +
             element.product_snapshoot.carriage;
     });
     return sum;

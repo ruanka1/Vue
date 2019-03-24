@@ -75,32 +75,45 @@
       </div>
       <div class="search-result">
         <div class="container">
-          <el-row class="card-group" :gutter="20">
-            <el-col class="single-card" v-for="it in list" :span="6" :key="it.id">
-              <el-card :body-style="{ padding: '0px' }" shadow="hover">
-                <router-link :to="`/product/${it.id}`">
-                  <img
-                    :src="it.main_img?'https://' + it.main_img[0]._base_url + '/' + it.main_img[0]._key:''"
-                  >
-                </router-link>
-                <div style="padding: 14px;">
+          <div v-if="total!=0">
+            <el-row class="card-group" :gutter="20">
+              <el-col class="single-card" v-for="it in list" :span="6" :key="it.id">
+                <el-card :body-style="{ padding: '0px' }" shadow="hover">
                   <router-link :to="`/product/${it.id}`">
-                    <span class="product-title">{{it.title}}</span>
+                    <img
+                      :src="it.main_img?'https://' + it.main_img[0]._base_url + '/' + it.main_img[0]._key:''
+                  "
+                      style="width:260px;height:150px"
+                    >
                   </router-link>
-                  <div class="product-price">￥{{Math.floor(it.price*(it.discount||1))}}</div>
-                </div>
-              </el-card>
-            </el-col>
-          </el-row>
-          <div class="pagination">
-            <el-pagination
-              :page-size="limit"
-              :current-page="searchObj.page"
-              layout="prev, pager, next"
-              :total="total"
-              @current-change="flip"
-            ></el-pagination>
+                  <div style="padding: 14px;">
+                    <router-link :to="`/product/${it.id}`">
+                      <span class="product-title">{{it.title}}</span>
+                    </router-link>
+                    <div class="product-price">
+                      <div class="discount" v-if="it.discount&&it.discount!=1">
+                        <span class="discount-price">￥{{(it.price*it.discount).toFixed(2)}}</span>
+                        <span class="origin-price">￥{{it.price}}</span>
+                      </div>
+                      <div class="origin" v-else>
+                        <div class="price">￥{{it.price}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </el-card>
+              </el-col>
+            </el-row>
+            <div class="pagination">
+              <el-pagination
+                :total="total"
+                :page-size="limit"
+                :current-page="searchObj.page"
+                layout="prev, pager, next"
+                @current-change="flip"
+              ></el-pagination>
+            </div>
           </div>
+          <div v-else class="no-result">撒子都莫得</div>
         </div>
       </div>
     </div>
@@ -153,11 +166,13 @@ export default {
     },
     read() {
       api("cat/read").then(r => {
-        this.cList = r.data;
+        this.catList = r.data;
       });
     },
     search() {
-      let keyword = `"title" contains "${this.searchObj.keyword}"`;
+      let keyword = this.searchObj.keyword
+        ? `"title" contains "${this.searchObj.keyword}"`
+        : "";
       let minPrice = this.searchObj.minPrice
         ? `and "price" >= ${this.searchObj.minPrice}`
         : "";
@@ -183,6 +198,15 @@ export default {
         limit: this.limit,
         page: this.searchObj.page
       };
+      if (!keyword && !minPrice && !maxPrice && !noCarriage && !discount)
+        param = {
+          sort_by: [
+            this.searchObj.sortBy || "id",
+            this.searchObj.sortUp ? "up" : "down"
+          ],
+          limit: this.limit,
+          page: this.searchObj.page
+        };
       api("product/read", param).then(r => {
         this.list = r.data;
         this.total = r.total;
@@ -301,6 +325,20 @@ export default {
   color: #e10;
   text-align: center;
   font-weight: bold;
+}
+.product-price .origin-price {
+  text-decoration: line-through;
+  font-size: 0.8rem;
+  color: #000;
+  font-weight: lighter;
+  padding-left: 0.5rem;
+}
+.no-result {
+  text-align: center;
+  padding: 2rem 0;
+  color: #bbb;
+  font-weight: bold;
+  font-size: 1rem;
 }
 </style>
 

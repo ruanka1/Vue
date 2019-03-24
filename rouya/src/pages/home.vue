@@ -10,6 +10,7 @@
                 <img
                   v-if="it.slide_img"
                   :src="'https://' + it.slide_img._base_url + '/' + it.slide_img._key"
+                  style="width:550px;height:300px"
                 >
               </router-link>
             </el-carousel-item>
@@ -71,17 +72,28 @@
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
                 <router-link :to="`/product/${it.id}`">
                   <div v-if="it.main_img">
-                    <img :src="'https://' + it.main_img[0]._base_url + '/' + it.main_img[0]._key">
+                    <img
+                      :src="'https://' + it.main_img[0]._base_url + '/' + it.main_img[0]._key"
+                      style="width:260px;height:150px"
+                    >
                   </div>
                   <div v-else>
-                    <img src="https://dummyimage.com/275x165">
+                    <img src="https://dummyimage.com/260x150">
                   </div>
                 </router-link>
                 <div style="padding: 14px;">
                   <router-link :to="`/product/${it.id}`">
                     <span class="product-title">{{it.title}}</span>
                   </router-link>
-                  <div class="product-price">￥{{Math.floor(it.price*(it.discount||1))}}</div>
+                  <div class="product-price">
+                    <div class="discount" v-if="it.discount&&it.discount!=1">
+                      <span class="discount-price">￥{{(it.price*it.discount).toFixed(2)}}</span>
+                      <span class="origin-price">￥{{it.price}}</span>
+                    </div>
+                    <div class="origin" v-else>
+                      <div class="price">￥{{it.price}}</div>
+                    </div>
+                  </div>
                 </div>
               </el-card>
             </el-col>
@@ -102,13 +114,29 @@
             >
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
                 <router-link :to="`/product/${it.id}`">
-                  <img :src="'https://' + it.main_img[0]._base_url + '/' + it.main_img[0]._key">
+                  <div v-if="it.main_img">
+                    <img
+                      :src="'https://' + it.main_img[0]._base_url + '/' + it.main_img[0]._key"
+                      style="width:260px;height:150px"
+                    >
+                  </div>
+                  <div v-else>
+                    <img src="https://dummyimage.com/260x150">
+                  </div>
                 </router-link>
                 <div style="padding: 14px;">
                   <router-link :to="`/product/${it.id}`">
                     <span class="product-title">{{it.title}}</span>
                   </router-link>
-                  <div class="product-price">￥{{Math.floor(it.price*(it.discount||1))}}</div>
+                  <div class="product-price">
+                    <div class="discount" v-if="it.discount&&it.discount!=1">
+                      <span class="discount-price">￥{{(it.price*it.discount).toFixed(2)}}</span>
+                      <span class="origin-price">￥{{it.price}}</span>
+                    </div>
+                    <div class="origin" v-else>
+                      <div class="price">￥{{it.price}}</div>
+                    </div>
+                  </div>
                 </div>
               </el-card>
             </el-col>
@@ -206,6 +234,13 @@ h2 {
   color: #e10;
   text-align: center;
   font-weight: bold;
+}
+.product-price .origin-price {
+  text-decoration: line-through;
+  font-size: 0.8rem;
+  color: #000;
+  font-weight: lighter;
+  padding-left: 0.5rem;
 }
 /* slide样式开始 */
 .el-carousel__item h3 {

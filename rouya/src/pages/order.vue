@@ -50,9 +50,10 @@
           <el-card>
             <el-row class="title" :gutter="10">
               <el-col :span="2">商品图片</el-col>
-              <el-col :span="7">商品名称</el-col>
-              <el-col :span="5">规格</el-col>
-              <el-col :span="3">单价</el-col>
+              <el-col :span="5">商品名称</el-col>
+              <el-col :span="4">规格</el-col>
+              <el-col :span="3">原价</el-col>
+              <el-col :span="3">售价</el-col>
               <el-col :span="2">数量</el-col>
               <el-col :span="2">运费</el-col>
               <el-col :span="3">总计</el-col>
@@ -66,12 +67,12 @@
                '' "
                 >
               </el-col>
-              <el-col class="item" :span="7">
+              <el-col class="item" :span="5">
                 <span>
                   <router-link :to="`/product/${it.product_id}`">{{it.product_snapshoot.title}}</router-link>
                 </span>
               </el-col>
-              <el-col class="item" :span="5">
+              <el-col class="item" :span="4">
                 <span v-if="!it.prop">-</span>
                 <span v-else>
                   <span v-for="item in it.prop" :key="item.id">{{item}} </span>
@@ -79,6 +80,9 @@
               </el-col>
               <el-col class="item" :span="3">
                 <span>￥{{it.product_snapshoot.price}}</span>
+              </el-col>
+              <el-col class="item" :span="3">
+                <span>￥{{(it.product_snapshoot.price*(it.product_snapshoot.discount||1)).toFixed(2)}}</span>
               </el-col>
               <el-col class="item" :span="2">
                 <span>{{it.count}}</span>
@@ -88,9 +92,9 @@
               </el-col>
               <el-col class="item" :span="3">
                 <span>
-                  ￥{{it.product_snapshoot.price*
+                  ￥{{(it.product_snapshoot.price*(it.product_snapshoot.discount||1)*
                   it.count+
-                  it.product_snapshoot.carriage}}
+                  it.product_snapshoot.carriage).toFixed(2)}}
                 </span>
               </el-col>
             </el-row>
