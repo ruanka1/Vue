@@ -7,7 +7,7 @@
     <div class="editForm">
       <el-button-group>
         <el-button v-if="!ui.showForm" @click="ui.showForm=true">创建</el-button>
-        <el-button v-if="ui.showForm" @click="cancleEdit()">取消</el-button>
+        <el-button v-if="ui.showForm" @click="cancelEdit()">取消</el-button>
       </el-button-group>
       <el-form
         v-if="ui.showForm"
@@ -182,7 +182,7 @@ export default {
       this.form = {};
       this.ui.showForm = false;
     },
-    cancleEdit() {
+    cancelEdit() {
       this.form = {};
       this.ui.showForm = false;
     },

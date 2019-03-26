@@ -11,9 +11,9 @@ const getters = {
   calculTotalPrice(state) {
     let totalPrice = 0;
     state.cartList.forEach(product => {
-      totalPrice += Math.floor(product.count * product.product_snapshoot.price * (product.product_snapshoot.discount || 1));
+      totalPrice += product.count * product.product_snapshoot.price * (product.product_snapshoot.discount || 1);
     });
-    return totalPrice
+    return totalPrice.toFixed(2)
   }
 };
 

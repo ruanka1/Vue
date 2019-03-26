@@ -26,11 +26,14 @@
 export default {
   data() {
     return {
-      searchForm: {}
+      searchForm: {
+        keyword: ""
+      }
     };
   },
   methods: {
     toSearch() {
+      if (!this.searchForm.keyword) this.searchForm.keyword = "伊力";
       this.$router.push({
         path: "/search",
         query: this.searchForm

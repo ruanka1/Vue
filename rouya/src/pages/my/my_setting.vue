@@ -22,22 +22,20 @@
                 <el-input v-model="tmp.phoneCaptcha"></el-input>
               </el-col>
               <el-col :span="6">
-                <sendCaptcha sendBy="phone" :sendTo="form.phone"/>
+                <sendCaptcha @send="storeCaptcha" sendBy="phone" :sendTo="form.phone"/>
               </el-col>
             </el-row>
           </el-form-item>
-
           <el-form-item label="邮箱" prop="mail">
             <el-input v-model="form.mail" :readonly="!editMode"></el-input>
           </el-form-item>
-
           <el-form-item label="验证码" v-if="showMailCaptcha">
             <el-row>
               <el-col :span="18">
                 <el-input v-model="tmp.mailCaptcha"></el-input>
               </el-col>
               <el-col :span="6">
-                <sendCaptcha sendBy="mail" :sendTo="form.mail"/>
+                <sendCaptcha @send="storeCaptcha" sendBy="mail" :sendTo="form.mail"/>
               </el-col>
             </el-row>
           </el-form-item>
@@ -45,8 +43,9 @@
           <el-form-item label="地址" prop="address">
             <el-input v-model="form.address" :readonly="!editMode"></el-input>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('form')" v-if="editMode">提交</el-button>
+          <el-form-item v-if="editMode">
+            <el-button type="primary" @click="submitForm('form')">提交</el-button>
+            <el-button @click="cancelEdit()">取消</el-button>
           </el-form-item>
         </fieldset>
       </el-form>
@@ -92,8 +91,14 @@ export default {
             if (r.data) {
               callback(new Error("手机号已存在"));
             } else {
-              this.showCaptcha = true;
-              callback();
+              this.showPhoneCaptcha = true;
+              if (!this.tmp.phoneCaptcha) {
+                callback(new Error("请输入验证码"));
+              } else if (this.tmp.captchaAnswer != this.tmp.phoneCaptcha) {
+                callback(new Error("验证码有误"));
+              } else {
+                callback();
+              }
             }
           });
         }
@@ -113,10 +118,25 @@ export default {
               callback(new Error("邮箱已存在"));
             } else {
               this.showMailCaptcha = true;
-              callback();
+              if (!this.tmp.mailCaptcha) {
+                callback(new Error("请输入验证码"));
+              } else if (this.tmp.captchaAnswer != this.tmp.mailCaptcha) {
+                callback(new Error("验证码有误"));
+              } else {
+                callback();
+              }
             }
           });
         }
+      } else {
+        callback();
+      }
+    };
+    var checkAddress = (rule, value, callback) => {
+      if (value != this.formCopy.mail) {
+        if (!value) {
+          callback(new Error("请填写地址"));
+        } else callback();
       } else {
         callback();
       }
@@ -132,7 +152,8 @@ export default {
       rules: {
         username: [{ validator: checkUsername, trigger: "blur" }],
         phone: [{ validator: checkPhone, trigger: "blur" }],
-        mail: [{ validator: checkMail, trigger: "blur" }]
+        mail: [{ validator: checkMail, trigger: "blur" }],
+        address: [{ validator: checkAddress, trigger: "blur" }]
       }
     };
   },
@@ -144,6 +165,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           api("user/update", this.form).then(() => {
+            location.reload();
             this.read();
             this.copyData();
           });
@@ -151,6 +173,12 @@ export default {
           return false;
         }
       });
+    },
+    cancelEdit() {
+      location.reload();
+    },
+    storeCaptcha(code) {
+      this.tmp.captchaAnswer = code;
     },
     read() {
       api("user/find", { id: session.user("id") }).then(r => {

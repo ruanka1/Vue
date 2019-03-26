@@ -44,33 +44,33 @@
           <el-row>
             <el-col class="single-group" :span="6">
               <div class="title">物流配送</div>
-              <a class="single-link" href="#">配送方式</a>
-              <a class="single-link" href="#">配送时间</a>
-              <a class="single-link" href="#">配送费用</a>
+              <a class="single-link blank-link" href="#!">配送方式</a>
+              <a class="single-link blank-link" href="#!">配送时间</a>
+              <a class="single-link blank-link" href="#!">配送费用</a>
             </el-col>
             <el-col class="single-group" :span="6">
               <div class="title">商城指南</div>
-              <a class="single-link" href="#">用户协议</a>
-              <a class="single-link" href="#">服务协议</a>
+              <a class="single-link blank-link" href="#!">用户协议</a>
+              <a class="single-link blank-link" href="#!">服务协议</a>
             </el-col>
             <el-col class="single-group" :span="6">
               <div class="title">售后服务</div>
-              <a class="single-link" href="#">退换货说明</a>
-              <a class="single-link" href="#">购物须知</a>
-              <a class="single-link" href="#">关于专票</a>
+              <a class="single-link blank-link" href="#!">退换货说明</a>
+              <a class="single-link blank-link" href="#!">购物须知</a>
+              <a class="single-link blank-link" href="#!">关于专票</a>
             </el-col>
             <el-col class="single-group" :span="6">
               <div class="title">关于我们</div>
-              <a class="single-link" href="#">公司资质</a>
-              <a class="single-link" href="#">文化理念</a>
-              <a class="single-link" href="#">联系我们</a>
+              <a class="single-link blank-link" href="#!">公司资质</a>
+              <a class="single-link blank-link" href="#!">文化理念</a>
+              <a class="single-link blank-link" href="#!">联系我们</a>
             </el-col>
           </el-row>
         </el-col>
         <el-col class="contact" :span="8">
           <div class="phone">0991-3671940</div>
           <div class="text">每日9:00-22:00在线服务</div>
-          <a class="btn-box" href="#">联系客服</a>
+          <a class="btn-box blank-link" href="#!">联系客服</a>
         </el-col>
       </el-row>
     </div>

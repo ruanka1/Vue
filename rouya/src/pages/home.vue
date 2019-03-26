@@ -22,34 +22,46 @@
           <el-row class="short-group" :gutter="20">
             <el-col class="single-shortcut" :span="6">
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
-                <img
-                  src="https://mock-cdn.biaoyansu.com/MOCK-FILE-5c93a6d89f6664.55775665.gif"
-                  class="image"
-                >
+                <router-link to="/search?keyword=花瓷">
+                  <img
+                    src="https://mock-cdn.biaoyansu.com/MOCK-FILE-5c93a6d89f6664.55775665.gif"
+                    class="image"
+                  >
+                  <div style="padding: 14px; text-align:center">伊力柔雅花瓷系列</div>
+                </router-link>
               </el-card>
             </el-col>
             <el-col class="single-shortcut" :span="6">
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
-                <img
-                  src="https://mock-cdn.biaoyansu.com/MOCK-FILE-5c93a4cd6bb2e4.74187379.gif"
-                  class="image"
-                >
+                <router-link to="/search?keyword=青翠">
+                  <img
+                    src="https://mock-cdn.biaoyansu.com/MOCK-FILE-5c93a4cd6bb2e4.74187379.gif"
+                    class="image"
+                  >
+                  <div style="padding: 14px; text-align:center">伊力柔雅青翠系列</div>
+                </router-link>
               </el-card>
             </el-col>
             <el-col class="single-shortcut" :span="6">
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
-                <img
-                  src="https://mock-cdn.biaoyansu.com/MOCK-FILE-5c93aa6f3a36b2.40978679.png"
-                  class="image"
-                >
+                <router-link to="/search?keyword=典藏">
+                  <img
+                    src="https://mock-cdn.biaoyansu.com/MOCK-FILE-5c93aa6f3a36b2.40978679.png"
+                    class="image"
+                  >
+                  <div style="padding: 14px; text-align:center">伊力典藏系列</div>
+                </router-link>
               </el-card>
             </el-col>
             <el-col class="single-shortcut" :span="6">
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
-                <img
-                  src="https://mock-cdn.biaoyansu.com/MOCK-FILE-5c93aa6aaf3768.41041496.gif"
-                  class="image"
-                >
+                <router-link to="/search?keyword=封坛">
+                  <img
+                    src="https://mock-cdn.biaoyansu.com/MOCK-FILE-5c93aa6aaf3768.41041496.gif"
+                    class="image"
+                  >
+                  <div style="padding: 14px; text-align:center">伊力封坛年份系列</div>
+                </router-link>
               </el-card>
             </el-col>
           </el-row>
@@ -95,6 +107,7 @@
                     </div>
                   </div>
                 </div>
+                <span class="sales">月售 : {{it.sales}}</span>
               </el-card>
             </el-col>
           </el-row>
@@ -138,6 +151,7 @@
                     </div>
                   </div>
                 </div>
+                <span class="sales">月销 : {{it.sales}}</span>
               </el-card>
             </el-col>
           </el-row>
@@ -241,6 +255,19 @@ h2 {
   color: #000;
   font-weight: lighter;
   padding-left: 0.5rem;
+}
+
+.single-card .el-card {
+  position: relative;
+}
+.single-card .el-card .sales {
+  position: absolute;
+  display: inline-block;
+  background-color: #fff;
+  right: 0;
+  bottom: 0;
+  padding: 0.1rem 0.3rem;
+  font-size: 0.7rem;
 }
 /* slide样式开始 */
 .el-carousel__item h3 {

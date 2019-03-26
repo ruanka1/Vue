@@ -35,18 +35,18 @@
           </div>
           <div class="text item">
             <span class="title">收货人</span>
-            <span class="content">{{userInfo.username}}</span>
+            <span class="content">{{list.$user.username}}</span>
           </div>
           <div class="text item">
             <span class="title">联系方式</span>
-            <span class="content">{{userInfo.phone}}</span>
+            <span class="content">{{list.$user.phone||list.$user.mail}}</span>
           </div>
           <div class="text item">
             <span class="title">收货地址</span>
-            <span class="content">{{userInfo.address?userInfo.address:'-'}}</span>
+            <span class="content">{{list.$user.address?list.$user.address:'-'}}</span>
           </div>
         </el-card>
-        <div class="list" v-for="it in list.detail" :key="it.id">
+        <div class="list" v-for="(it,index) in list.detail" :key="index">
           <el-card>
             <el-row class="title" :gutter="10">
               <el-col :span="2">商品图片</el-col>
@@ -75,7 +75,7 @@
               <el-col class="item" :span="4">
                 <span v-if="!it.prop">-</span>
                 <span v-else>
-                  <span v-for="item in it.prop" :key="item.id">{{item}} </span>
+                  <span v-for="item in it.prop" :key="item.id">{{item}}</span>
                 </span>
               </el-col>
               <el-col class="item" :span="3">
@@ -98,7 +98,7 @@
                 </span>
               </el-col>
             </el-row>
-          </el-card>
+          </el-card>   
         </div>
         <el-card v-if="!list._paid&&!session.isAdmin()">
           <div class="pay-amount">
@@ -143,8 +143,7 @@ import session from "../lib/session";
 export default {
   data() {
     return {
-      list: {},
-      userInfo: {},
+      list: { $user: {} },
       order_$payment: {},
       showPay_by: "",
       wechatPopupVisible: false,
@@ -153,24 +152,17 @@ export default {
     };
   },
   mounted() {
-    this.list.orderId = this.$route.params.id;
+    this.list.order_id = this.$route.params.id;
     this.findOrder();
   },
   methods: {
     findOrder() {
       let l = this.list;
       api("order/read", {
-        where: { and: { id: l.orderId } }
+        where: { and: { id: l.order_id } },
+        with: ["belongs_to:user"]
       }).then(r => {
         this.list = r.data[0];
-        this.findUser(this.list.user_id);
-      });
-    },
-    findUser() {
-      api("user/read", {
-        where: { and: { id: this.list.user_id } }
-      }).then(r => {
-        this.userInfo = r.data[0];
       });
     },
     createPayUrl(type) {

@@ -55,7 +55,7 @@ export default {
     return {
       list: [],
       readParam: {
-        limit: 10,
+        limit: 5,
         page: 1
       },
       total: 0

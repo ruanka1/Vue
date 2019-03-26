@@ -100,6 +100,7 @@
                       </div>
                     </div>
                   </div>
+                  <span class="sales">月销 : {{it.sales}}</span>
                 </el-card>
               </el-col>
             </el-row>
@@ -129,6 +130,7 @@ export default {
   data() {
     return {
       searchObj: {
+        keyword: "",
         page: 1
       },
       list: [],
@@ -198,15 +200,15 @@ export default {
         limit: this.limit,
         page: this.searchObj.page
       };
-      if (!keyword && !minPrice && !maxPrice && !noCarriage && !discount)
-        param = {
-          sort_by: [
-            this.searchObj.sortBy || "id",
-            this.searchObj.sortUp ? "up" : "down"
-          ],
-          limit: this.limit,
-          page: this.searchObj.page
-        };
+      // if (!keyword && !minPrice && !maxPrice && !noCarriage && !discount)
+      //   param = {
+      //     sort_by: [
+      //       this.searchObj.sortBy || "id",
+      //       this.searchObj.sortUp ? "up" : "down"
+      //     ],
+      //     limit: this.limit,
+      //     page: this.searchObj.page
+      //   };
       api("product/read", param).then(r => {
         this.list = r.data;
         this.total = r.total;
@@ -339,6 +341,18 @@ export default {
   color: #bbb;
   font-weight: bold;
   font-size: 1rem;
+}
+.single-card .el-card {
+  position: relative;
+}
+.single-card .el-card .sales {
+  position: absolute;
+  display: inline-block;
+  background-color: #fff;
+  right: 0;
+  bottom: 0;
+  padding: 0.1rem 0.3rem;
+  font-size: 0.7rem;
 }
 </style>
 

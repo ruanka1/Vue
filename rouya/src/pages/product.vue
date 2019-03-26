@@ -33,7 +33,7 @@
               </dl>
               <dl class="service">
                 <dt class="title">本店活动</dt>
-                <dd class="text">满100元包邮</dd>
+                <dd class="text blank-link">暂无活动</dd>
               </dl>
               <dl class="carriage">
                 <dt class="title">运费</dt>
@@ -44,15 +44,15 @@
               <el-row class="sales">
                 <el-col :span="8">
                   <span class="title">月销量</span>
-                  <span class="amount">{{row.sales?row.sales:'0'}}</span>
+                  <span class="amount blank-link">{{row.sales?row.sales:'0'}}</span>
                 </el-col>
                 <el-col :span="8">
                   <span class="title">好评数</span>
-                  <span class="amount">999</span>
+                  <span class="amount blank-link">999</span>
                 </el-col>
                 <el-col :span="8">
                   <span class="title">累计评价</span>
-                  <span class="amount">9999</span>
+                  <span class="amount blank-link">9999</span>
                 </el-col>
               </el-row>
             </div>
@@ -86,9 +86,9 @@
             <div class="promise">
               <dl>
                 <dt>服务承诺</dt>
-                <a class="item" href="#">正品保障</a>
-                <a class="item" href="#">破损包退</a>
-                <a class="item" href="#">假一赔十</a>
+                <a class="item blank-link" href="#!">正品保障</a>
+                <a class="item blank-link" href="#!">破损包退</a>
+                <a class="item blank-link" href="#!">假一赔十</a>
               </dl>
             </div>
           </el-col>
@@ -124,9 +124,21 @@
                 </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="规格参数"></el-tab-pane>
-            <el-tab-pane label="累计评价"></el-tab-pane>
-            <el-tab-pane label="售后服务"></el-tab-pane>
+            <el-tab-pane class="review-list" label="累计评价">
+              <!-- <el-row class="single-review" v-for="it in reviewList" :key="it.id">
+                <el-col :span="19">{{it.text}}</el-col>
+                <el-col :span="5">{{it.$user.username}} {{it.review_at}}</el-col>
+              </el-row>-->
+              <div v-if="reviewList&&reviewList.length!=0" class="pagination">
+                <el-pagination
+                  :page-size="readParam.limit"
+                  :current-page="readParam.page"
+                  layout="prev, pager, next"
+                  :total="reviewTotal"
+                  @current-change="flip"
+                ></el-pagination>
+              </div>
+            </el-tab-pane>
           </el-tabs>
         </div>
       </div>
@@ -154,16 +166,28 @@ export default {
         count: 1,
         prop: {}
       },
-      caution: false
+      caution: false,
+      reviewList: [],
+      readParam: {
+        where: {
+          and: {
+            product_id: this.$route.params.id
+          }
+        },
+        with: ["belongs_to:user"],
+        limit: 5,
+        page: 1
+      },
+      reviewTotal: 0
     };
   },
   mounted() {
     this.row.id = this.$route.params.id;
     this.find();
+    // this.readReview();
   },
   methods: {
     ...mapActions(["addToCart"]),
-
     find() {
       this.disableBtn = false;
       api("product/find", this.row).then(r => {
@@ -238,6 +262,16 @@ export default {
     },
     setProp(key, value) {
       this.$set(this.form.prop, key, value);
+    },
+    // readReview() {
+    //   api("review/read", this.readParam).then(r => {
+    //     this.reviewList = r.data;
+    //     this.reviewTotal = r.total;
+    //   });
+    // },
+    flip(page) {
+      this.readParam.page = page;
+      this.readReview();
     }
   }
 };
@@ -414,6 +448,16 @@ dl dd {
 }
 .el-tabs--border-card {
   box-shadow: none;
+}
+.single-review {
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.single-review:last-child {
+  border-bottom: 0;
+}
+.pagination {
+  padding-bottom: 0;
 }
 /* 轮播样式开始 */
 .el-carousel__item h3 {

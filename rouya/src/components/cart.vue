@@ -11,10 +11,15 @@
         </el-col>
       </el-row>
       <el-row class="cart-body" v-for="(it,k) in cartList" :key="(it,k)" body-style="{padding:0}">
-        <el-col class="img" :span="5">
-          <img src=" https://dummyimage.com/60x60">
+        <el-col class="img" :span="6">
+          <img
+            v-if="it.product_snapshoot.main_img"
+            :src="'https://' + it.product_snapshoot.main_img[0]._base_url + '/' + it.product_snapshoot.main_img[0]._key"
+            style="width:70px;height:60px"
+          >
+          <img v-else src=" https://dummyimage.com/70x60">
         </el-col>
-        <el-col class="text" :span="18">
+        <el-col class="text" :span="17">
           <div class="title">
             <router-link
               :to="`/product/${it.product_id}`"
@@ -31,7 +36,7 @@
             ></el-input-number>
             <span
               class="price"
-            >￥{{Math.floor(it.count*it.product_snapshoot.price*(it.product_snapshoot.discount||1))}}</span>
+            >￥{{(it.count*it.product_snapshoot.price*(it.product_snapshoot.discount||1)).toFixed(2)}}</span>
             <a class="delete-btn" href="#" @click="remove(it.product_id,k)">删除</a>
           </el-row>
         </el-col>
@@ -132,7 +137,7 @@ button {
   margin-bottom: 8px;
 }
 .cart-body .price {
-  margin-left: 1rem;
+  margin-left: .5rem;
 }
 .el-input-number {
   width: 100px;

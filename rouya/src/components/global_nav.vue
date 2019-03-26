@@ -4,11 +4,11 @@
       <el-row class="nav">
         <el-col class="nav-left" :span="12">
           <router-link to="/">首页</router-link>
-          <a href="#">品牌</a>
-          <a href="#">排行</a>
-          <a href="#">经销商查询</a>
-          <a href="#">下载App</a>
-          <a href="#">周边服务</a>
+          <a class="blank-link" href="#!">品牌</a>
+          <a class="blank-link" href="#!">排行</a>
+          <a class="blank-link" href="#!">经销商查询</a>
+          <a class="blank-link" href="#!">下载App</a>
+          <a class="blank-link" href="#!">周边服务</a>
         </el-col>
         <el-col class="nav-right" :span="12">
           <span v-if="cartList.length==0">

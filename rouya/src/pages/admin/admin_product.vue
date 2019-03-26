@@ -33,7 +33,6 @@
             <el-option v-for="it in catList" :key="it.id" :value="it.id" :label="it.catname"></el-option>
           </el-select>
         </el-form-item>
-
         <el-form-item label="新品推荐" prop="new_product">
           <el-switch v-model="form.new_product" active-color="#13ce66"></el-switch>
         </el-form-item>
@@ -54,7 +53,7 @@
                 v-if="form.slide_img"
                 :src="'https://' + form.slide_img._base_url + '/' + form.slide_img._key"
               >
-              <button @click="removeSlideImg()" type="button">删除</button>
+              <button class="danger" @click="removeSlideImg()" type="button">删除</button>
             </el-col>
           </el-row>
         </el-form-item>
@@ -72,38 +71,46 @@
           <div class="show-prop" v-for="(value,key) in form.prop" :key="(value,key)">
             <span class="show-prop-data">{{key}}</span>
             <span class="show-prop-data">{{value}}</span>
-            <button @click="editProp(key,value)" type="button">编辑</button>
-            <button @click="removeProp(key)" type="button">删除</button>
+            <button @click="editProp(key,value)" type="primary">编辑</button>
+            <button @click="removeProp(key)" class="danger">删除</button>
           </div>
         </el-form-item>
 
         <el-form-item class="item" label="上传商品图片" :gutter="10">
           <Uploader class="uploader" @uploadSuccess="mainImgUpload" :autoUpload="true"/>
-          <el-col class="wrapper" :span="8" v-for="(it,key) in form.main_img" :key="(it,key)">
-            <img :src="'https://' + it._base_url + '/' + it._key">
-            <button @click="removeMainImg(key)" type="button">删除</button>
-          </el-col>
+          <el-row :gutter="10">
+            <el-col class="wrapper" :span="6" v-for="(it,key) in form.main_img" :key="(it,key)">
+              <img :src="'https://' + it._base_url + '/' + it._key" style="border:1px solid #ccc">
+              <el-button class="delete-btn" @click="removeMainImg(key)" type="danger">删除</el-button>
+            </el-col>
+          </el-row>
         </el-form-item>
 
-        <el-form-item class="product_detail item" label="添加详情描述">
-          <el-button type="button" @click="inertDes('text')">添加描述文字</el-button>
-          <el-button type="button" @click="inertDes('image')">添加描述图片</el-button>
-          <div class="inertDes" v-for="(it,i) in form.detail" :key="(it,i)">
-            <div class="des-text" v-if="it.type==='text'">
-              <el-input type="textarea" v-model="it.value" placeholder="添加描述文字"></el-input>
-            </div>
-            <div v-else>
-              <Uploader
-                class="uploader des-img"
-                @uploadSuccess="singleDesImgUpload($event,i)"
-                :autoUpload="true"
-              />
-              <div v-if="it.value">
-                <img :src="'https://' + it.value._base_url + '/' + it.value._key">
+        <el-form-item class="product-detail item" label="添加详情描述">
+          <el-row>
+            <el-button type="button" @click="inertDes('text')">添加描述文字</el-button>
+            <el-button type="button" @click="inertDes('image')">添加描述图片</el-button>
+          </el-row>
+          <el-row class="inertDes" v-for="(it,i) in form.detail" :key="(it,i)">
+            <el-col :span="20">
+              <div class="des-text" v-if="it.type==='text'">
+                <textarea v-model="it.value" placeholder="添加描述文字"></textarea>
               </div>
-            </div>
-            <button @click="removeDes(i)" type="button">删除</button>
-          </div>
+              <div v-else>
+                <Uploader
+                  class="uploader des-img"
+                  @uploadSuccess="singleDesImgUpload($event,i)"
+                  :autoUpload="true"
+                />
+                <div v-if="it.value">
+                  <img :src="'https://' + it.value._base_url + '/' + it.value._key">
+                </div>
+              </div>
+            </el-col>
+            <el-col class="inertBtn" :span="3">
+              <el-button @click="removeDes(i)" type="danger">删除</el-button>
+            </el-col>
+          </el-row>
         </el-form-item>
 
         <el-form-item>
@@ -120,6 +127,7 @@
               <img
                 :src=" 
               'https://' + scope.row.main_img[0]._base_url + '/' + scope.row.main_img[0]._key "
+                style="width:100px;height:70px"
               >
             </div>
             <div v-else>暂无图片</div>
@@ -175,7 +183,7 @@ export default {
         value = Number(value);
         if (typeof value === "number" && !isNaN(value)) {
           if (value <= 0 || value > 1)
-            callback(new Error("价格不可小于0或大于1"));
+            callback(new Error("折扣应介于0到1之间"));
           else callback();
         } else callback(new Error("格式有误"));
       } else callback();
@@ -399,5 +407,27 @@ form {
 }
 .el-form-item {
   margin-right: 100px;
+}
+.delete-btn {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+  width: 100%;
+}
+.danger {
+  color: #fff;
+  background-color: #f56c6c;
+  border-color: #f56c6c;
+}
+.product-detail .el-form-item__content > * {
+  margin-bottom: 1rem;
+}
+
+.product-detail .des-text textarea {
+  width: 100%;
+  min-height: 10rem;
+}
+
+.inertBtn {
+  margin-left: 1rem;
 }
 </style>
