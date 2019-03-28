@@ -107,6 +107,7 @@
                     </div>
                   </div>
                 </div>
+                <span v-if="it.discount&&it.discount!=1" class="discount-board">优惠</span>
                 <span class="sales">月售 : {{it.sales}}</span>
               </el-card>
             </el-col>
@@ -151,6 +152,7 @@
                     </div>
                   </div>
                 </div>
+                <span v-if="it.discount&&it.discount!=1" class="discount-board">优惠</span>
                 <span class="sales">月销 : {{it.sales}}</span>
               </el-card>
             </el-col>
@@ -234,7 +236,7 @@ h2 {
 .single-card .product-title {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   overflow: hidden;
   vertical-align: middle;
   text-align: center;
@@ -256,18 +258,26 @@ h2 {
   font-weight: lighter;
   padding-left: 0.5rem;
 }
-
 .single-card .el-card {
   position: relative;
 }
+.single-card .el-card .discount-board,
 .single-card .el-card .sales {
   position: absolute;
   display: inline-block;
+  padding: 0.1rem 0.3rem;
+  font-size: 0.7rem;
+}
+.single-card .el-card .sales {
   background-color: #fff;
   right: 0;
   bottom: 0;
-  padding: 0.1rem 0.3rem;
-  font-size: 0.7rem;
+}
+.single-card .discount-board {
+  background-color: red;
+  color: #fff;
+  right: 0;
+  top: 0;
 }
 /* slide样式开始 */
 .el-carousel__item h3 {

@@ -27,7 +27,7 @@
           <el-input v-model="form.mail" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="form.password" autocomplete="off"></el-input>
+          <el-input v-model="form.password" type="password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('form')">提交</el-button>

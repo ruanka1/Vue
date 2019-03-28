@@ -7,7 +7,7 @@
             <img src="../img/logo.png">
           </router-link>
         </el-col>
-        <el-col class="search-bar" :span="19">
+        <el-col class="search-bar" :span="14">
           <form class="search" @submit.prevent="toSearch()">
             <el-input
               v-model="searchForm.keyword"

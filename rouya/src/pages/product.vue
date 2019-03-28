@@ -125,10 +125,13 @@
               </div>
             </el-tab-pane>
             <el-tab-pane class="review-list" label="累计评价">
-              <!-- <el-row class="single-review" v-for="it in reviewList" :key="it.id">
-                <el-col :span="19">{{it.text}}</el-col>
-                <el-col :span="5">{{it.$user.username}} {{it.review_at}}</el-col>
-              </el-row>-->
+              <el-row class="single-review" v-for="it in reviewList" :key="it.id">
+                <el-row class="meta">
+                  <el-col class="name" :span="21">{{it.$user.username}}</el-col>
+                  <el-col class="time" :span="3">{{it.review_at}}</el-col>
+                </el-row>
+                <el-row class="content">{{it.text}}</el-row>
+              </el-row>
               <div v-if="reviewList&&reviewList.length!=0" class="pagination">
                 <el-pagination
                   :page-size="readParam.limit"
@@ -184,7 +187,7 @@ export default {
   mounted() {
     this.row.id = this.$route.params.id;
     this.find();
-    // this.readReview();
+    this.readReview();
   },
   methods: {
     ...mapActions(["addToCart"]),
@@ -263,12 +266,12 @@ export default {
     setProp(key, value) {
       this.$set(this.form.prop, key, value);
     },
-    // readReview() {
-    //   api("review/read", this.readParam).then(r => {
-    //     this.reviewList = r.data;
-    //     this.reviewTotal = r.total;
-    //   });
-    // },
+    readReview() {
+      api("review/read", this.readParam).then(r => {
+        this.reviewList = r.data;
+        this.reviewTotal = r.total;
+      });
+    },
     flip(page) {
       this.readParam.page = page;
       this.readReview();
@@ -458,6 +461,24 @@ dl dd {
 }
 .pagination {
   padding-bottom: 0;
+}
+.single-review .meta {
+  font-size: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+.meta .name {
+  font-size: 0.9rem;
+}
+.meta .time {
+  color: rgba(0, 0, 0, 0.5);
+  text-align: right;
+}
+.product-name,
+.meta .name,
+.single-review .content {
+  word-wrap: break-word;
+  word-break: break-all;
+  overflow: hidden;
 }
 /* 轮播样式开始 */
 .el-carousel__item h3 {

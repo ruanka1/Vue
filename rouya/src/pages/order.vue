@@ -65,6 +65,7 @@
               'https://' + it.product_snapshoot.main_img[0]._base_url + '/' + 
                it.product_snapshoot.main_img[0]._key :
                '' "
+                  style="width:80px;height:70px"
                 >
               </el-col>
               <el-col class="item" :span="5">
@@ -98,7 +99,19 @@
                 </span>
               </el-col>
             </el-row>
-          </el-card>   
+            <form
+              @submit.prevent="submitReview(index,it.product_id,$event)"
+              class="review"
+              v-if="list._paid&&!session.isAdmin()&&showReview "
+              style="text-align:left"
+            >
+              <div style="margin-bottom:0.5rem;">添加评论</div>
+              <input v-model="review[index]">
+              <div>
+                <button type="submit" style="margin-top:0.5rem;">提交</button>
+              </div>
+            </form>
+          </el-card>
         </div>
         <el-card v-if="!list._paid&&!session.isAdmin()">
           <div class="pay-amount">
@@ -140,6 +153,7 @@
 <script>
 import api from "../lib/api.js";
 import session from "../lib/session";
+import { orderCreatedTime } from "../lib/create_order.js";
 export default {
   data() {
     return {
@@ -148,12 +162,16 @@ export default {
       showPay_by: "",
       wechatPopupVisible: false,
       alipayPopupVisible: false,
-      session
+      session,
+      review: {},
+      showReview: "",
+      len: ""
     };
   },
   mounted() {
     this.list.order_id = this.$route.params.id;
     this.findOrder();
+    this.findReview();
   },
   methods: {
     findOrder() {
@@ -163,6 +181,7 @@ export default {
         with: ["belongs_to:user"]
       }).then(r => {
         this.list = r.data[0];
+        this.len = this.list.detail.length;
       });
     },
     createPayUrl(type) {
@@ -181,6 +200,33 @@ export default {
         }
         if (type === "wechat") {
           this.wechatPopupVisible = true;
+        }
+      });
+    },
+    findReview() {
+      api("review/read", {
+        where: { and: { order_id: this.list.order_id } }
+      }).then(r => {
+        if (r.data == null) {
+          this.showReview = true;
+        } else if (r.data.length < this.len) {
+          this.showReview = true;
+        } else {
+          this.showReview = false;
+        }
+      });
+    },
+    submitReview(index, product_id, e) {
+      if (!this.review[index]) return;
+      api("review/create", {
+        order_id: this.$route.params.id,
+        product_id: product_id,
+        user_id: this.list.$user.id,
+        review_at: orderCreatedTime(),
+        text: this.review[index]
+      }).then(r => {
+        if (r.success) {
+          e.target.hidden = true;
         }
       });
     },
@@ -226,7 +272,7 @@ h3 {
   -webkit-line-clamp: 3;
   overflow: hidden;
   vertical-align: middle;
-  padding-top: 0.8rem;
+  padding-top: 1.5rem;
 }
 .list .content .item:first-of-type {
   padding-top: 0;

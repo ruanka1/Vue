@@ -118,7 +118,6 @@ export default {
               // eslint-disable-next-line
             }).then(r => {
               alert("密码修改成功");
-              // location.href = "/login";
               this.$router.push("/login");
             });
           }

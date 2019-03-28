@@ -22,12 +22,24 @@
                 :type="searchObj.sortBy=='id'?'primary':''"
                 @click="sortBy('id')"
                 size="medium"
-              >综合</el-button>
+              >
+                综合
+                <span v-if="searchObj.sortBy=='sales'">
+                  <i class="el-icon-caret-top" v-if="searchObj.sortUp"></i>
+                  <i class="el-icon-caret-bottom" v-else></i>
+                </span>
+              </el-button>
               <el-button
                 :type="searchObj.sortBy=='sales'?'primary':''"
                 @click="sortBy('sales')"
                 size="medium"
-              >销量</el-button>
+              >
+                销量
+                <span v-if="searchObj.sortBy=='sales'">
+                  <i class="el-icon-caret-top" v-if="searchObj.sortUp"></i>
+                  <i class="el-icon-caret-bottom" v-else></i>
+                </span>
+              </el-button>
               <el-button
                 :type="searchObj.sortBy=='price'?'primary':''"
                 @click="sortBy('price')"
@@ -100,6 +112,7 @@
                       </div>
                     </div>
                   </div>
+                  <span v-if="it.discount&&it.discount!=1" class="discount-board">优惠</span>
                   <span class="sales">月销 : {{it.sales}}</span>
                 </el-card>
               </el-col>
@@ -200,15 +213,6 @@ export default {
         limit: this.limit,
         page: this.searchObj.page
       };
-      // if (!keyword && !minPrice && !maxPrice && !noCarriage && !discount)
-      //   param = {
-      //     sort_by: [
-      //       this.searchObj.sortBy || "id",
-      //       this.searchObj.sortUp ? "up" : "down"
-      //     ],
-      //     limit: this.limit,
-      //     page: this.searchObj.page
-      //   };
       api("product/read", param).then(r => {
         this.list = r.data;
         this.total = r.total;
@@ -345,14 +349,24 @@ export default {
 .single-card .el-card {
   position: relative;
 }
+
+.single-card .el-card .discount-board,
 .single-card .el-card .sales {
   position: absolute;
   display: inline-block;
+  padding: 0.1rem 0.3rem;
+  font-size: 0.7rem;
+}
+.single-card .sales {
   background-color: #fff;
   right: 0;
   bottom: 0;
-  padding: 0.1rem 0.3rem;
-  font-size: 0.7rem;
+}
+.single-card .discount-board {
+  background-color: red;
+  color: #fff;
+  right: 0;
+  top: 0;
 }
 </style>
 

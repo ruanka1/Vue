@@ -137,7 +137,7 @@ button {
   margin-bottom: 8px;
 }
 .cart-body .price {
-  margin-left: .5rem;
+  margin-left: 0.3rem;
 }
 .el-input-number {
   width: 100px;
