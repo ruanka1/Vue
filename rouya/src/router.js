@@ -9,6 +9,7 @@ import Login from './pages/login.vue'
 import Findback from './pages/findback.vue'
 
 import My from './pages/my/my_base.vue'
+import My_Favorite from './pages/my/my_favorite.vue'
 import My_Order from './pages/my/my_order.vue'
 import My_Setting from './pages/my/my_setting.vue'
 
@@ -45,6 +46,9 @@ export default [{
     children: [{
         path: 'order',
         component: My_Order
+    }, {
+        path: 'favorite',
+        component: My_Favorite
     }, {
         path: 'setting',
         component: My_Setting,

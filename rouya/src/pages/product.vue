@@ -5,14 +5,22 @@
       <div class="preview">
         <el-row class="container">
           <el-col class="product-image" :span="10">
-            <el-carousel height="250px">
-              <el-carousel-item v-for="it in row.main_img" :key="it.id">
-                <img
-                  :src="  'https://' + it._base_url + '/' + it._key"
-                  style="width:450px;height:260px"
-                >
-              </el-carousel-item>
-            </el-carousel>
+            <el-row>
+              <el-carousel height="250px">
+                <el-carousel-item v-for="it in row.main_img" :key="it.id">
+                  <img
+                    :src="  'https://' + it._base_url + '/' + it._key"
+                    style="width:450px;height:260px"
+                  >
+                </el-carousel-item>
+              </el-carousel>
+            </el-row>
+            <el-row>
+              <el-button @click="addToFavorite">
+                <span v-if="isFavorite">★已收藏</span>
+                <span v-else>☆收藏</span>
+              </el-button>
+            </el-row>
           </el-col>
           <el-col class="product-info" :span="14">
             <div class="product-name">{{row.title}}</div>
@@ -80,8 +88,8 @@
               </dl>
             </div>
             <div class="main-button">
-              <button class="buy" @click="confirmOrder()">立即购买</button>
-              <button class="add-cart" @click="addToShopCart()">加入购物车</button>
+              <button class="buy" @click="confirmOrder">立即购买</button>
+              <button class="add-cart" @click="addToShopCart">加入购物车</button>
             </div>
             <div class="promise">
               <dl>
@@ -181,13 +189,16 @@ export default {
         limit: 5,
         page: 1
       },
-      reviewTotal: 0
+      reviewTotal: 0,
+      isFavorite: false,
+      favoriteId: ""
     };
   },
   mounted() {
     this.row.id = this.$route.params.id;
     this.find();
     this.readReview();
+    this.readFavorite();
   },
   methods: {
     ...mapActions(["addToCart"]),
@@ -275,6 +286,32 @@ export default {
     flip(page) {
       this.readParam.page = page;
       this.readReview();
+    },
+    readFavorite() {
+      api("favorite/read", {
+        where: {
+          and: {
+            user_id: session.user("id"),
+            product_id: this.$route.params.id
+          }
+        }
+      }).then(r => {
+        if (r.data == null) return (this.isFavorite = false);
+        else return (this.isFavorite = true), (this.favoriteId = r.data[0].id);
+      });
+    },
+    addToFavorite() {
+      if (!this.isFavorite) {
+        api("favorite/create", {
+          user_id: session.user("id"),
+          product_id: this.$route.params.id
+        });
+      } else {
+        api("favorite/delete", {
+          id: this.favoriteId
+        });
+      }
+      return (this.isFavorite = !this.isFavorite);
     }
   }
 };

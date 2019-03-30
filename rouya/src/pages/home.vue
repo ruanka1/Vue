@@ -232,7 +232,6 @@ h2 {
 .title .more a {
   padding: 0.5rem 0;
 }
-
 .single-card .product-title {
   display: -webkit-box;
   -webkit-box-orient: vertical;

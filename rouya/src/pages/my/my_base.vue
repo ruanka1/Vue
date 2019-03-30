@@ -7,6 +7,10 @@
             <i class="el-icon-document"></i>
             <span slot="title">订单</span>
           </el-menu-item>
+          <el-menu-item index="favorite">
+            <i class="el-icon-document"></i>
+            <span slot="title">收藏</span>
+          </el-menu-item>
           <el-menu-item index="setting">
             <i class="el-icon-setting"></i>
             <span slot="title">设置</span>
