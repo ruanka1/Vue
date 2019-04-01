@@ -1,14 +1,11 @@
 <template>
-  <div class="container">
+  <div class="container" @mouseleave="$emit('hideCart')">
     <div class="cart">
       <el-row slot="header" class="cart-header clearfix">
-        <el-col :span="21">
+        <el-row>
           <span v-if="cartList.length!=0">我的购物车</span>
           <span v-else>撒子都莫得</span>
-        </el-col>
-        <el-col :span="3">
-          <el-button @click="$emit('hideCart')" style="padding: 1px 0" type="text">关闭</el-button>
-        </el-col>
+        </el-row>
       </el-row>
       <el-row class="cart-body" v-for="(it,k) in cartList" :key="(it,k)" body-style="{padding:0}">
         <el-col class="img" :span="6">

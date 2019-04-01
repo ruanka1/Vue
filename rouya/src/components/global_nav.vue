@@ -12,11 +12,11 @@
         </el-col>
         <el-col class="nav-right" :span="12">
           <span v-if="cartList.length==0">
-            <a @click="cartVisible=!cartVisible">购物车</a>
+            <a @mouseenter="cartVisible=true">购物车</a>
           </span>
           <span v-else>
             <el-badge class="item" :value="cartList.length">
-              <a @click="cartVisible=!cartVisible">购物车</a>
+              <a @mouseenter="cartVisible=true">购物车</a>
             </el-badge>
           </span>
           <span v-if="session.loggedIn()&&!session.isAdmin()">

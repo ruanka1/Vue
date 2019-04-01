@@ -175,9 +175,8 @@ export default {
   },
   methods: {
     findOrder() {
-      let l = this.list;
       api("order/read", {
-        where: { and: { id: l.order_id } },
+        where: { and: { id: this.list.order_id } },
         with: ["belongs_to:user"]
       }).then(r => {
         this.list = r.data[0];

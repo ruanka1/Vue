@@ -56,11 +56,11 @@
                 </el-col>
                 <el-col :span="8">
                   <span class="title">好评数</span>
-                  <span class="amount blank-link">999</span>
+                  <span class="amount blank-link">{{reviewTotal}}</span>
                 </el-col>
                 <el-col :span="8">
                   <span class="title">累计评价</span>
-                  <span class="amount blank-link">9999</span>
+                  <span class="amount">{{reviewTotal}}</span>
                 </el-col>
               </el-row>
             </div>
@@ -288,6 +288,7 @@ export default {
       this.readReview();
     },
     readFavorite() {
+      if (!session.loggedIn()) return;
       api("favorite/read", {
         where: {
           and: {
@@ -301,6 +302,10 @@ export default {
       });
     },
     addToFavorite() {
+      if (!session.loggedIn()) {
+        this.$router.push("/login");
+        return;
+      }
       if (!this.isFavorite) {
         api("favorite/create", {
           user_id: session.user("id"),

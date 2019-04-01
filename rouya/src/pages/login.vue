@@ -3,11 +3,13 @@
     <div class="form-container">
       <h1>登录</h1>
       <form @submit.prevent="login">
-        <label>用户名/手机/邮箱
+        <label>
+          用户名/手机/邮箱
           <el-input v-model="form.loginName"></el-input>
           <div class="error" v-for="it in error" :key="it.id">{{it.loginName}}</div>
         </label>
-        <label>密码
+        <label>
+          密码
           <el-input v-model="form.password" type="password"></el-input>
           <div class="error" v-for="it in error" :key="it.id">{{it.password}}</div>
         </label>
@@ -40,7 +42,10 @@ export default {
       //如果未通过登陆验证则直接return
       if (this.validate() == false) return;
       //判断是否为admin登录
-      if (this.form.loginName === "admin" && this.form.password === "admin") {
+      if (
+        this.form.loginName === "rouyaAdmin" &&
+        this.form.password === "admin123"
+      ) {
         session.logIn("admin", { username: "admin", IS_ADMIN: true });
         return;
       }

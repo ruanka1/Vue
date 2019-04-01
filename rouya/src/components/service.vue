@@ -6,7 +6,7 @@
           <span>
             <img
               class="img"
-              src="https://prod-oss.emaotai.cn/front-assets/assets/image/index2/fake.png"
+              src="../img/icon-1.png"
             >
           </span>
           <span class="text">正品保障 假一罚十</span>
@@ -15,7 +15,7 @@
           <span>
             <img
               class="img"
-              src="https://prod-oss.emaotai.cn/front-assets/assets/image/index2/fakeb.png"
+              src="../img/icon-2.png"
             >
           </span>
           <span class="text">提供发票 正规机打</span>
@@ -24,7 +24,7 @@
           <span>
             <img
               class="img"
-              src="https://prod-oss.emaotai.cn/front-assets/assets/image/index2/fakec.png"
+              src="../img/icon-3.png"
             >
           </span>
           <span class="text">官方直供 直邮到家</span>
@@ -33,7 +33,7 @@
           <span>
             <img
               class="img"
-              src="https://prod-oss.emaotai.cn/front-assets/assets/image/index2/faked.png"
+              src="../img/icon-4.png"
             >
           </span>
           <span class="text">真诚服务 顾客至上</span>
