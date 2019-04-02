@@ -18,7 +18,7 @@ import Router from "vue-router"
 Vue.use(Router)
 import routeConfig from "./router.js"
 const router = new Router({
-  mode: "history",
+  mode: "hash",
   routes: routeConfig,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

@@ -173,7 +173,7 @@ export default {
     },
     setPropFilter(prop, it) {
       this.searchObj["@" + prop] = it.id;
-      this.reload();
+      this.resetPage();
     },
     removePropFilter(prop) {
       delete this.searchObj["@" + prop];
@@ -224,13 +224,13 @@ export default {
         else delete this.searchObj.sortUp;
       }
       this.searchObj.sortBy = type;
-      this.reload();
+      this.resetPage();
     },
     toggleBool(type) {
       if (this.searchObj[type]) delete this.searchObj[type];
       else this.searchObj[type] = "1";
 
-      this.reload();
+      this.resetPage();
     },
     reload() {
       this.$router.push({
@@ -246,6 +246,10 @@ export default {
     },
     flip(page) {
       this.searchObj.page = page;
+      this.reload();
+    },
+    resetPage() {
+      this.searchObj.page = 1;
       this.reload();
     }
   },
