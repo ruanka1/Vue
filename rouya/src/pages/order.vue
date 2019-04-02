@@ -102,7 +102,7 @@
             <form
               @submit.prevent="submitReview(index,it.product_id,$event)"
               class="review"
-              v-if="list._paid&&!session.isAdmin()&&showReview "
+              v-if="list._paid&&!session.isAdmin()&&!findSingleReview(it.product_id) "
               style="text-align:left"
             >
               <div style="margin-bottom:0.5rem;">添加评论</div>
@@ -164,14 +164,13 @@ export default {
       alipayPopupVisible: false,
       session,
       review: {},
-      showReview: "",
-      len: ""
+      tmpList: []
     };
   },
   mounted() {
     this.list.order_id = this.$route.params.id;
     this.findOrder();
-    this.findReview();
+    // this.findReview();
   },
   methods: {
     findOrder() {
@@ -180,7 +179,15 @@ export default {
         with: ["belongs_to:user"]
       }).then(r => {
         this.list = r.data[0];
-        this.len = this.list.detail.length;
+        let len = this.list.detail.length;
+        //获取当前订单中所有商品的评论 将d当前订单所有商品的product_id存到tmpList
+        api("review/read", {
+          where: { and: { order_id: this.$route.params.id } }
+        }).then(r => {
+          for (let i = 0; i < len; i++) {
+            this.tmpList.push(r.data && r.data[i] ? r.data[i].product_id : "");
+          }
+        });
       });
     },
     createPayUrl(type) {
@@ -202,19 +209,7 @@ export default {
         }
       });
     },
-    findReview() {
-      api("review/read", {
-        where: { and: { order_id: this.list.order_id } }
-      }).then(r => {
-        if (r.data == null) {
-          this.showReview = true;
-        } else if (r.data.length < this.len) {
-          this.showReview = true;
-        } else {
-          this.showReview = false;
-        }
-      });
-    },
+    findReview() {},
     submitReview(index, product_id, e) {
       if (!this.review[index]) return;
       api("review/create", {
@@ -231,6 +226,12 @@ export default {
     },
     reloadPage() {
       location.reload();
+    },
+    //判断当前商品的评论状态
+    findSingleReview(product_id) {
+      for (let i = 0; i < this.tmpList.length; i++) {
+        if (this.tmpList[i] == product_id) return true;
+      }
     }
   }
 };
