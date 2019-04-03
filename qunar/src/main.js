@@ -1,12 +1,19 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+import api from "./lib/api"
+window.api = api
+
 import "./css/reset.css"
 import "./css/border.css"
 import "./css/iconfont.css"
 
 import fastClick from "fastclick"
 fastClick.attach(document.body)
+
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+Vue.use(VueAwesomeSwiper)
+import 'swiper/dist/css/swiper.css'
 
 import Router from "vue-router"
 Vue.use(Router)
@@ -31,3 +38,5 @@ new Vue({
   router,
   render: h => h(App),
 }).$mount('#app')
+
+

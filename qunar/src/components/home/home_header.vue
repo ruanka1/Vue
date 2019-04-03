@@ -4,8 +4,10 @@
       <span class="iconfont">&#xe624;</span>
     </div>
     <div class="header-middle">
-      <span class="iconfont">&#xe632;</span>
-      输入城市/景点/游玩主题
+      <a href="#" class="link">
+        <span class="iconfont">&#xe632;</span>
+        输入城市/景点/游玩主题
+      </a>
     </div>
     <div class="header-right">
       北京
@@ -18,13 +20,11 @@
 export default {};
 </script>
 <style lang="stylus" scoped>
-@import '../css/varibles.styl';
-
 .header {
   line-height: 0.86rem;
   display: flex;
   color: #fff;
-  background-color: $mainColor;
+  background-color: #00afc7;
 
   .header-left {
     width: 0.64rem;
@@ -40,9 +40,13 @@ export default {};
     padding-left: 0.2rem;
     height: 0.6rem;
     line-height: 0.6rem;
-    color: rgba(0, 0, 0, 0.15);
     background: #fff;
     border-radius: 0.06rem;
+
+    .link {
+      display: block;
+      color: rgba(0, 0, 0, 0.15);
+    }
 
     .iconfont {
       font-weight: bold;
