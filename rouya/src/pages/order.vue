@@ -100,13 +100,13 @@
               </el-col>
             </el-row>
             <form
-              @submit.prevent="submitReview(index,it.product_id,$event)"
-              class="review"
-              v-if="list._paid&&!session.isAdmin()&&!findSingleReview(it.product_id) "
+              @submit.prevent="submitComment(index,it.product_id,$event)"
+              class="comment"
+              v-if="list._paid&&!session.isAdmin()&&!findSingleComment(it.product_id) "
               style="text-align:left"
             >
               <div style="margin-bottom:0.5rem;">添加评论</div>
-              <input v-model="review[index]">
+              <input v-model="comment[index]">
               <div>
                 <button type="submit" style="margin-top:0.5rem;">提交</button>
               </div>
@@ -163,14 +163,13 @@ export default {
       wechatPopupVisible: false,
       alipayPopupVisible: false,
       session,
-      review: {},
+      comment: {},
       tmpList: []
     };
   },
   mounted() {
     this.list.order_id = this.$route.params.id;
     this.findOrder();
-    // this.findReview();
   },
   methods: {
     findOrder() {
@@ -181,7 +180,7 @@ export default {
         this.list = r.data[0];
         let len = this.list.detail.length;
         //获取当前订单中所有商品的评论 将d当前订单所有商品的product_id存到tmpList
-        api("review/read", {
+        api("comment/read", {
           where: { and: { order_id: this.$route.params.id } }
         }).then(r => {
           for (let i = 0; i < len; i++) {
@@ -209,15 +208,14 @@ export default {
         }
       });
     },
-    findReview() {},
-    submitReview(index, product_id, e) {
-      if (!this.review[index]) return;
-      api("review/create", {
+    submitComment(index, product_id, e) {
+      if (!this.comment[index]) return;
+      api("comment/create", {
         order_id: this.$route.params.id,
         product_id: product_id,
         user_id: this.list.$user.id,
-        review_at: orderCreatedTime(),
-        text: this.review[index]
+        comment_at: orderCreatedTime(),
+        text: this.comment[index]
       }).then(r => {
         if (r.success) {
           e.target.hidden = true;
@@ -228,7 +226,7 @@ export default {
       location.reload();
     },
     //判断当前商品的评论状态
-    findSingleReview(product_id) {
+    findSingleComment(product_id) {
       for (let i = 0; i < this.tmpList.length; i++) {
         if (this.tmpList[i] == product_id) return true;
       }

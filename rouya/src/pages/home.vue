@@ -12,6 +12,7 @@
                   :src="'https://' + it.slide_img._base_url + '/' + it.slide_img._key"
                   style="width:550px;height:300px"
                 >
+                <img v-else src="https://dummyimage.com/550x300">
               </router-link>
             </el-carousel-item>
           </el-carousel>

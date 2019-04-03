@@ -6,12 +6,18 @@
         <el-row class="container">
           <el-col class="product-image" :span="10">
             <el-row>
-              <el-carousel height="250px">
+              <el-carousel height="250px" v-if="row.main_img">
                 <el-carousel-item v-for="it in row.main_img" :key="it.id">
                   <img
+                    v-if="it"
                     :src="  'https://' + it._base_url + '/' + it._key"
                     style="width:450px;height:260px"
                   >
+                </el-carousel-item>
+              </el-carousel>
+              <el-carousel height="250px" v-else>
+                <el-carousel-item>
+                  <img src="https://dummyimage.com/450x260">
                 </el-carousel-item>
               </el-carousel>
             </el-row>
@@ -56,11 +62,11 @@
                 </el-col>
                 <el-col :span="8">
                   <span class="title">好评数</span>
-                  <span class="amount blank-link">{{reviewTotal}}</span>
+                  <span class="amount blank-link">{{commentTotal}}</span>
                 </el-col>
                 <el-col :span="8">
                   <span class="title">累计评价</span>
-                  <span class="amount">{{reviewTotal}}</span>
+                  <span class="amount">{{commentTotal}}</span>
                 </el-col>
               </el-row>
             </div>
@@ -132,20 +138,20 @@
                 </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane class="review-list" label="累计评价">
-              <el-row class="single-review" v-for="it in reviewList" :key="it.id">
+            <el-tab-pane class="comment-list" label="累计评价">
+              <el-row class="single-comment" v-for="it in commentList" :key="it.id">
                 <el-row class="meta">
                   <el-col class="name" :span="21">{{it.$user.username}}</el-col>
-                  <el-col class="time" :span="3">{{it.review_at}}</el-col>
+                  <el-col class="time" :span="3">{{it.comment_at}}</el-col>
                 </el-row>
                 <el-row class="content">{{it.text}}</el-row>
               </el-row>
-              <div v-if="reviewList&&reviewList.length!=0" class="pagination">
+              <div v-if="commentList&&commentList.length!=0" class="pagination">
                 <el-pagination
                   :page-size="readParam.limit"
                   :current-page="readParam.page"
                   layout="prev, pager, next"
-                  :total="reviewTotal"
+                  :total="commentTotal"
                   @current-change="flip"
                 ></el-pagination>
               </div>
@@ -178,7 +184,7 @@ export default {
         prop: {}
       },
       caution: false,
-      reviewList: [],
+      commentList: [],
       readParam: {
         where: {
           and: {
@@ -189,7 +195,7 @@ export default {
         limit: 5,
         page: 1
       },
-      reviewTotal: 0,
+      commentTotal: 0,
       isFavorite: false,
       favoriteId: ""
     };
@@ -197,7 +203,7 @@ export default {
   mounted() {
     this.row.id = this.$route.params.id;
     this.find();
-    this.readReview();
+    this.readComment();
     this.readFavorite();
   },
   methods: {
@@ -277,15 +283,15 @@ export default {
     setProp(key, value) {
       this.$set(this.form.prop, key, value);
     },
-    readReview() {
-      api("review/read", this.readParam).then(r => {
-        this.reviewList = r.data;
-        this.reviewTotal = r.total;
+    readComment() {
+      api("comment/read", this.readParam).then(r => {
+        this.commentList = r.data;
+        this.commentTotal = r.total;
       });
     },
     flip(page) {
       this.readParam.page = page;
-      this.readReview();
+      this.readComment();
     },
     readFavorite() {
       if (!session.loggedIn()) return;
@@ -494,17 +500,17 @@ dl dd {
 .el-tabs--border-card {
   box-shadow: none;
 }
-.single-review {
+.single-comment {
   padding: 1rem 0.5rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
-.single-review:last-child {
+.single-comment:last-child {
   border-bottom: 0;
 }
 .pagination {
   padding-bottom: 0;
 }
-.single-review .meta {
+.single-comment .meta {
   font-size: 0.7rem;
   margin-bottom: 0.5rem;
 }
@@ -517,7 +523,7 @@ dl dd {
 }
 .product-name,
 .meta .name,
-.single-review .content {
+.single-comment .content {
   word-wrap: break-word;
   word-break: break-all;
   overflow: hidden;
