@@ -10,14 +10,21 @@
       </a>
     </div>
     <div class="header-right">
-      北京
-      <span class="iconfont">&#xe64a;</span>
+      <router-link to="/city">
+        {{cityModule.currentCity}}
+        <span class="iconfont">&#xe64a;</span>
+      </router-link>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+export default {
+  computed: {
+    ...mapState(["cityModule"])
+  }
+};
 </script>
 <style lang="stylus" scoped>
 .header {
@@ -55,8 +62,13 @@ export default {};
 
   .header-right {
     float: right;
-    width: 1.24rem;
+    min-width: 1.04rem;
+    padding: 0 0.1rem;
     text-align: center;
+
+    a {
+      color: #fff;
+    }
 
     .iconfont {
       font-size: 0.1rem;

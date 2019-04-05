@@ -15,6 +15,7 @@
     </ul>
     <HomeRecom :list="recomList"/>
     <HomeBanner :list="bannerList"/>
+    <GlobalFooter/>
   </div>
 </template>
 
@@ -25,10 +26,21 @@ import HomeSwiper from "../components/home/home_swiper";
 import HomeCat from "../components/home/home_cat";
 import HomeRecom from "../components/home/home_recom";
 import HomeBanner from "../components/home/home_banner";
+import GlobalFooter from "../components/global_footer";
+import { mapState } from "vuex";
+
 export default {
-  components: { HomeHeader, HomeSwiper, HomeCat, HomeRecom, HomeBanner },
+  components: {
+    HomeHeader,
+    HomeSwiper,
+    HomeCat,
+    HomeRecom,
+    HomeBanner,
+    GlobalFooter
+  },
   data() {
     return {
+      lastCity: "",
       swiperImgList: [
         { id: 1, url: require("../img/home/home_slide_1.jpg") },
         { id: 2, url: require("../img/home/home_slide_2.jpg") },
@@ -61,12 +73,27 @@ export default {
     };
   },
   mounted() {
+    this.lastCity = this.cityModule.currentCity;
     this.readCat();
     this.readRecom();
   },
+  computed: {
+    ...mapState(["cityModule"])
+  },
+  activated() {
+    //如果更换了当前城市 则重新请求新城市的数据
+    //如果没有更换城市 则使用第一次请求的缓存数据
+    if (this.cityModule.currentCity !== this.lastCity) {
+      // this.readCat();
+      // this.readRecom();
+      this.lastCity = this.cityModule.currentCity;
+    }
+  },
   methods: {
     readCat() {
-      api("cat/read").then(r => {
+      api("cat/read", {
+        // where: { and: { city: this.cityModule.currentCity } }
+      }).then(r => {
         this.catList = r.data.sort((a, b) => {
           return a.id - b.id;
         });
@@ -74,6 +101,7 @@ export default {
     },
     readRecom() {
       api("recom/read", {
+        // where: { and: { city: this.cityModule.currentCity } },
         limit: this.limit,
         page: this.page
       }).then(r => {

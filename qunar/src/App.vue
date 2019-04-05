@@ -1,16 +1,14 @@
 <template>
   <div id="app">
-    <router-view></router-view>
-    <GlobalFooter/>
+    <!-- 缓存数据 减少异步请求 -->
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
   </div>
 </template>
 
 <script>
-import GlobalFooter from "./components/global_footer";
-
-export default {
-  components: { GlobalFooter }
-};
+export default {};
 </script>
 
 <style>
