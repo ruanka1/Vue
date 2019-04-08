@@ -1,10 +1,14 @@
 import Home from "./pages/home.vue"
 import SelectCity from "./pages/select_city.vue"
+import Product from "./pages/product.vue"
 
 export default [{
     path: '/',
-    component: Home
+    component: Home,
 }, {
     path: '/city',
-    component: SelectCity
+    component: SelectCity,
+}, {
+    path: '/product/:id',
+    component: Product,
 }]

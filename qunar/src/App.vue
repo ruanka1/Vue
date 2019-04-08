@@ -1,9 +1,10 @@
 <template>
   <div id="app">
     <!-- 缓存数据 减少异步请求 -->
-    <keep-alive>
-      <router-view/>
+    <keep-alive v-if="$route.meta.keepAlive">
+      <router-view></router-view>
     </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 

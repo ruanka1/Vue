@@ -6,7 +6,7 @@
         热门榜单
       </div>
       <ul class="recom-list" v-for="it in list" :key="it.id">
-        <li class="item">
+        <router-link :to="'/product/' + it.id" tag="li" class="item">
           <img class="img" :src="it.img_url">
           <div class="info">
             <div class="item-title">{{it.title}}</div>
@@ -23,7 +23,7 @@
               <div class="text">{{it.desc}}</div>
             </div>
           </div>
-        </li>
+        </router-link>
       </ul>
     </div>
   </div>
