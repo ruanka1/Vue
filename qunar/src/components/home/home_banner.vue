@@ -44,7 +44,7 @@ export default {
       overflow: hidden;
 
       .img {
-        max-width: 100%;
+        width: 100%;
       }
     }
 

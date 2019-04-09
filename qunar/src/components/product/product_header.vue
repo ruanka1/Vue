@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     changeTopBar() {
-      const top = document.documentElement.scrollTop;
+      const top = document.documentElement.scrollTop || document.body.scrollTop;
       if (top > 10) {
         let opacity = top / 100;
         this.fixedOpacity.opacity = opacity > 1 ? 1 : opacity;
