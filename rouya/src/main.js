@@ -38,25 +38,25 @@ new Vue({
   render: h => h(App),
 }).$mount('#app')
 
-//管理员路由验证
+
+//全局路由守卫
 router.beforeEach((to, from, next) => {
+  //管理员页
   let toAdmin = to.matched[0].path == '/admin';
+  //个人设置页
+  let toMy = to.matched[0].path == '/my';
+  //订单页
+  let toOrder = to.matched[0].path == '/order/:id';
   if (toAdmin) {
-    //判断访问者身份是否为管理员
     if (session.isAdmin())
-      //如果为true则允许访问 如果为false则禁止访问
       next();
     next(false)
-  } else {
-    next()
-  }
-})
-
-//个人页路由验证
-router.beforeEach((to, from, next) => {
-  let toMy = to.matched[0].path == '/my';
-  if (toMy) {
+  } else if (toMy) {
     if (session.loggedIn() && !session.isAdmin())
+      next();
+    next(false)
+  } else if (toOrder) {
+    if (session.loggedIn())
       next();
     next(false)
   } else {
