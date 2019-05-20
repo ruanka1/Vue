@@ -231,6 +231,9 @@ export default {
         if (this.tmpList[i] == product_id) return true;
       }
     }
+  },
+  beforeRouteUpdate(to, from, next) {
+    next(false);
   }
 };
 </script>

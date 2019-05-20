@@ -1,4 +1,4 @@
-//避免在禁用Dlocalstorage时报错
+//避免在禁用localstorage时报错
 let defaultCity = "北京";
 try {
     if (localStorage.currentCity) {

@@ -1,13 +1,11 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-import {
-  store
-} from "./store/index"
-
 import "./css/reset.css"
 import "./css/border.css"
 import "./css/iconfont.css"
+
+import store from "./store/index"
 
 import fastClick from "fastclick"
 fastClick.attach(document.body)
