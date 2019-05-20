@@ -13,7 +13,7 @@ class HomeRequest extends HTTP {
 
     // create(data) {
     //     return this.request({
-    //         url: 'citymovie/create',
+    //         url: 'movie/create',
     //         data
     //     })
     // }

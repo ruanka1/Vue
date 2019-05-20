@@ -39,6 +39,7 @@
             <SingleMovie class="single-movie-cmp" :detail="it"/>
           </router-link>
         </ul>
+        <LoadMore v-show="!showLoading" :page="1" :totalPage="totalPage" @load="onLoad"/>
       </div>
     </div>
     <Loading v-show="showLoading" class="loading"/>
@@ -50,15 +51,16 @@ import Header from "../components/header";
 import store from "../lib/localstorage";
 import Loading from "../components/loading";
 import SingleMovie from "../components/single_movie";
-
+import LoadMore from "../components/load_more";
 import { HomeRequest } from "../models/home";
 const homeRequest = new HomeRequest();
 export default {
-  components: { Header, Loading, SingleMovie },
+  components: { Header, Loading, SingleMovie, LoadMore },
   data() {
     return {
       keyword: "",
       page: 1,
+      totalPage: 0,
       showResult: false,
       showLoading: false,
       showResultCount: false,
@@ -90,12 +92,18 @@ export default {
       let query = `where("title" contains "${q}")`;
       homeRequest.search({ query, page: this.page }).then(r => {
         this.pending = false;
-        this.searchResult = r.data;
+        this.searchResult = [...this.searchResult, ...r.data];
         this.resultCount = r.total ? r.total : 0;
+        this.totalPage = Math.ceil(r.total / 15);
         this.showResultCount = true;
         this.showLoading = false;
       });
       this.storageSearch(q);
+    },
+
+    onLoad(page) {
+      this.page = page;
+      this.search(this.keyword);
     },
 
     storageSearch(keyword) {
@@ -127,6 +135,7 @@ export default {
       this.keyword = "";
       this.histroyList = this.getHistory();
       this.searchResult = [];
+      this.page = 1;
       this.showResultCount = false;
     }
   },
