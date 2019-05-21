@@ -53,7 +53,10 @@ export default {
       NowPlayingList: [],
       CommingSoonList: [],
       errorTip: false,
-      showLoading: false
+      showLoading: false,
+      longitude: 0,
+      latitude: 0,
+      locationCity: ""
     };
   },
   mounted() {
@@ -75,7 +78,6 @@ export default {
         }
       });
     },
-
     switchTab(tab) {
       this.currentTab = tab;
     }

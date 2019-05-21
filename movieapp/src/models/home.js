@@ -25,6 +25,20 @@ class HomeRequest extends HTTP {
         })
     }
 
+    readComment(data) {
+        return this.request({
+            url: "comment/read",
+            data
+        })
+    }
+
+    createComment(data) {
+        return this.request({
+            url: "comment/create",
+            data
+        })
+    }
+
     search(data) {
         return this.request({
             url: 'movie/read',

@@ -35,7 +35,6 @@
 import Bscroll from "better-scroll";
 import { mapState, mapMutations } from "vuex";
 export default {
-  name: "CityList",
   props: { hotCity: Array, allCity: Object, letter: String },
   mounted() {
     this.scroll = new Bscroll(this.$refs.wrapper);

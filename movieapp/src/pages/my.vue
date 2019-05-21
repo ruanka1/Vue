@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Header>
+    <Header class="header">
       <h1 class="title" slot="title">我的</h1>
     </Header>
     <div v-if="!session.loggedIn()" class="wrapper">
@@ -19,10 +19,37 @@
       <div class="content">
         <div :is="currentTab"></div>
       </div>
+      <div class="test-account">
+        <div class="account">测试账号：123456</div>
+        <div class="password">测试密码：123123</div>
+      </div>
     </div>
-    <div v-else class="user-info">
-      <div class="username">欢迎 {{session.user().phone}}</div>
-      <div class="logout" @click="logOut">登出</div>
+    <div v-else>
+      <div class="user-info">
+        <div class="username">欢迎 {{session.user().phone}}</div>
+        <div class="logout" @click="logOut">登出</div>
+      </div>
+      <div v-if="!noComment" class="comment-list">
+        <ul class="list">
+          <div v-if="myCommentList" class="title">我评论过的电影</div>
+          <div v-else class="title">还没有评论过电影</div>
+          <router-link
+            :to="`/movie/${it.movie_id}`"
+            class="item"
+            v-for="it in myCommentList"
+            :key="it.id"
+            tag="li"
+          >
+            <SingleMovie class="single-movie-cmp" :detail="it.$movie"/>
+            <div class="meta">
+              <div class="user">我的评论</div>
+              <div class="time">{{(it.date).substring(0, 10)}}</div>
+            </div>
+            <div class="text">{{it.text}}</div>
+          </router-link>
+        </ul>
+      </div>
+      <div v-else>还没有评论过</div>
     </div>
     <TapBar/>
   </div>
@@ -33,20 +60,46 @@ import Header from "../components/header";
 import TapBar from "../components/tapbar";
 import Login from "../components/my/login";
 import Signup from "../components/my/signup";
-import session from "../lib/session";
+import SingleMovie from "../components/single_movie";
 
+import session from "../lib/session";
+import { HomeRequest } from "../models/home";
+const homeRequest = new HomeRequest();
 export default {
-  components: { Header, TapBar, Login, Signup },
+  components: { Header, TapBar, Login, Signup, SingleMovie },
   data() {
     return {
       currentTab: "login",
       loggedIn: null,
-      session
+      session,
+      myCommentList: [],
+      noComment: null
     };
   },
-  mounted() {},
+  mounted() {
+    if (session.loggedIn()) this.readMyComment();
+  },
 
   methods: {
+    readMyComment() {
+      homeRequest
+        .readComment({
+          where: {
+            and: {
+              user_id: session.user().id
+            }
+          },
+          with: ["belongs_to:movie"]
+        })
+        .then(r => {
+          if (r) {
+            this.myCommentList = r.data;
+          } else {
+            this.noComment = true;
+          }
+        });
+    },
+
     logOut() {
       session.logOut();
     },
@@ -58,6 +111,14 @@ export default {
 </script>
 
 <style scoped>
+.single-movie-cmp /deep/ .text .text-item {
+  width: 100%;
+}
+
+.header {
+  position: fixed;
+  z-index: 1;
+}
 .nav {
   position: absolute;
   top: 1rem;
@@ -96,28 +157,93 @@ export default {
   right: 0;
   bottom: 0;
 }
-
 .user-info {
-  width: 6rem;
-  height: 5rem;
-  margin: 0 auto;
-  margin-top: 2rem;
-  text-align: center;
-  font-size: 0.6rem;
+  position: fixed;
+  z-index: 1;
+  top: 1rem;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.4rem;
+  border-bottom: 1px solid #f5f5f5;
+  background-color: #fff;
 }
+
 .username {
-  padding-bottom: 1rem;
+  flex-basis: 80%;
+  margin-left: 0.3rem;
 }
 .logout {
-  width: 100%;
-  height: 0.8rem;
-  background: #f03d37;
+  flex-basis: 20%;
+  border: 1px solid #f03d37;
   border-radius: 5px;
-  border: none;
+  text-align: center;
+  padding: 0.1rem;
+  margin-right: 0.3rem;
+}
+.comment-list {
+  position: absolute;
+  top: 2.02rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.comment-list .list {
+  margin: 0 0.24rem 1.5rem 0.24rem;
+  overflow: hidden;
+}
+.comment-list .list .title {
+  padding-top: 0.24rem;
+  font-size: 0.32rem;
+}
+.comment-list .list .item {
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid #f5f5f5;
+}
+.comment-list .list .item:last-child {
+  border-bottom: 0;
+}
+.comment-list .list .meta {
+  padding-bottom: 0.2rem;
+  font-size: 0.3rem;
+}
+.comment-list .list .meta::before,
+.comment-list .list .meta::after {
   display: block;
-  color: #fff;
+  content: "";
+  clear: both;
+}
+.comment-list .list .meta .user {
+  width: 50%;
+  float: left;
+}
+
+.comment-list .list .meta .time {
+  width: 50%;
+  float: left;
+  text-align: right;
+}
+
+.test-account {
+  position: absolute;
+  top: 7rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   font-size: 0.5rem;
-  margin-top: 0.5rem;
-  line-height: 0.8rem;
+  line-height: 1rem;
+}
+
+.item .text {
+  line-height: 0.4rem;
 }
 </style>

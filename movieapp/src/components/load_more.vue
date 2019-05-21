@@ -1,7 +1,7 @@
 <template>
   <div class="scrollLoad">
     <span v-if="noMore" class="no-more">暂无更多</span>
-    <button v-else @click="loadMore()" class="loadBtn">{{btnText}}</button>
+    <button v-else @click="loadMore()" class="loadBtn"></button>
   </div>
 </template>
 <script>

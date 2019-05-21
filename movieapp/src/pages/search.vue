@@ -90,14 +90,20 @@ export default {
       this.showLoading = true;
       this.showResult = true;
       let query = `where("title" contains "${q}")`;
-      homeRequest.search({ query, page: this.page }).then(r => {
-        this.pending = false;
-        this.searchResult = [...this.searchResult, ...r.data];
-        this.resultCount = r.total ? r.total : 0;
-        this.totalPage = Math.ceil(r.total / 15);
-        this.showResultCount = true;
-        this.showLoading = false;
-      });
+      homeRequest
+        .search({ query, page: this.page })
+        .then(r => {
+          this.pending = false;
+          this.searchResult = [...this.searchResult, ...r.data];
+          this.resultCount = r.total ? r.total : 0;
+          this.totalPage = Math.ceil(r.total / 15);
+          this.showResultCount = true;
+          this.showLoading = false;
+        })
+        .catch(() => {
+          this.showLoading = false;
+          this.showResultCount = true;
+        });
       this.storageSearch(q);
     },
 
@@ -135,12 +141,15 @@ export default {
       this.keyword = "";
       this.histroyList = this.getHistory();
       this.searchResult = [];
+      this.resultCount = 0;
       this.page = 1;
       this.showResultCount = false;
     }
   },
   watch: {
     keyword() {
+      this.searchResult = [];
+      this.resultCount = 0;
       if (!this.keyword) this.showResultCount = false;
     }
   }
@@ -148,6 +157,9 @@ export default {
 </script>
 
 <style scoped>
+.single-movie-cmp /deep/ .text .text-item {
+  width: 100%;
+}
 .container .header {
   position: fixed;
   z-index: 1;

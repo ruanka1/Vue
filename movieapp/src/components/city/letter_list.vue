@@ -5,7 +5,7 @@
         class="item"
         @click="clickLetter"
         @touchstart="startTouch"
-        @touchmove="moveTouch"
+        @touchmove.prevent="moveTouch"
         @touchend="stopTouch"
         v-for="it in letterArr"
         :key="it"
@@ -18,7 +18,6 @@
 
 <script>
 export default {
-  name: "LetterList",
   props: {
     allCity: Object
   },

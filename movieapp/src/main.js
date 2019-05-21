@@ -10,10 +10,6 @@ import store from "./store/index"
 import fastClick from "fastclick"
 fastClick.attach(document.body)
 
-import VueAwesomeSwiper from 'vue-awesome-swiper'
-Vue.use(VueAwesomeSwiper)
-import 'swiper/dist/css/swiper.css'
-
 import Router from "vue-router"
 Vue.use(Router)
 import routeConfig from "./router.js"
