@@ -4,7 +4,7 @@
       <h1 class="title" slot="title">搜索</h1>
       <router-link to="/home" class="iconfont icon-fanhui back" slot="back"/>
     </Header>
-    <div class="search-bar">
+    <div class="search-bar border-bottom">
       <div class="wrap">
         <i class="iconfont icon-xiazai17 search"></i>
         <form @submit.prevent="handleSearch">
@@ -16,6 +16,15 @@
     <div class="content">
       <div v-if="showResultCount" class="result-count">共找到{{resultCount}}条结果</div>
       <div v-if="!keyword" class="search-type">
+        <div class="hot">
+          <div class="title">
+            <i class="iconfont icon-hot"></i>
+            <span>热门搜索</span>
+          </div>
+          <div class="list">
+            <span class="tag" @click="clickTag('之')">之</span>
+          </div>
+        </div>
         <div v-show="histroyList.length" class="history">
           <div class="title">
             <i class="iconfont icon-history"></i>
@@ -31,7 +40,7 @@
         <ul class="list">
           <router-link
             :to="`/movie/${it.movie_id}`"
-            class="item"
+            class="item border-bottom"
             v-for="it in searchResult"
             :key="it.id"
             tag="li"
@@ -86,10 +95,16 @@ export default {
 
     search(q) {
       if (this.pending) return;
+      this.histroyList.unshift(q);
       this.pending = true;
       this.showLoading = true;
       this.showResult = true;
       let query = `where("title" contains "${q}")`;
+      // let query = {
+      //   where: {
+      //     or: [["title", "=", q], ["actor", "=", q]]
+      //   }
+      // };
       homeRequest
         .search({ query, page: this.page })
         .then(r => {
@@ -157,9 +172,6 @@ export default {
 </script>
 
 <style scoped>
-.single-movie-cmp /deep/ .text .text-item {
-  width: 100%;
-}
 .container .header {
   position: fixed;
   z-index: 1;
@@ -172,14 +184,13 @@ export default {
   align-items: center;
   width: 100%;
   height: 1.1rem;
-  border-bottom: 1px solid #f5f5f5;
   z-index: 1;
   background-color: #fff;
 }
 
 .result-count {
   position: fixed;
-  top: 2.12rem;
+  top: 2.1rem;
   left: 0;
   right: 0;
   text-align: center;
@@ -190,7 +201,7 @@ export default {
 }
 .container .content {
   position: absolute;
-  top: 2.12rem;
+  top: 2.1rem;
   left: 0;
   right: 0;
   bottom: 0;
@@ -203,9 +214,10 @@ export default {
   padding: 0 0.2rem;
 }
 .search-bar .wrap form {
-  width: 80%;
+  width: 100%;
 }
 .search-bar .wrap .input {
+  box-sizing: border-box;
   height: 0.7rem;
   width: 100%;
   background-color: #f5f5f5;
@@ -223,7 +235,7 @@ export default {
 .search-bar .wrap .clear {
   right: 0.4rem;
 }
-
+.search-type .hot,
 .search-type .history {
   padding: 0 0.2rem;
 }
@@ -237,7 +249,7 @@ export default {
 
 .search-type .title .clear-history {
   position: absolute;
-  right: 0.2rem;
+  right: 0.3rem;
 }
 
 .search-type .iconfont {
@@ -266,8 +278,8 @@ export default {
   margin: 0 0.24rem;
   overflow: hidden;
 }
-.search-result .list .item {
-  border-bottom: 1px solid #f5f5f5;
+.search-result .list .item:last-child:before {
+  border-bottom: 0;
 }
 
 .loading {

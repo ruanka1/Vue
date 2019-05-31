@@ -44,15 +44,15 @@
             </li>
           </ul>
         </div>
-        <form
-          class="comment-form"
-          v-if="session.loggedIn()&&!commented"
-          @submit.prevent="submitComment"
-        >
-          <input class="add-comment" v-model="commentText" placeholder="添加评论 不可超过50字符">
-          <button class="btn" type="submit">提交</button>
-        </form>
       </div>
+      <form
+        class="comment-form"
+        v-if="session.loggedIn()&&!commented"
+        @submit.prevent="submitComment"
+      >
+        <input class="add-comment" v-model="commentText" placeholder="添加评论 不可超过50字符">
+        <button class="btn" type="submit">提交</button>
+      </form>
     </div>
     <Loading v-else class="loading"/>
   </div>
@@ -286,14 +286,20 @@ export default {
 }
 
 .comment-form {
-  padding: 0.3rem 0;
+  padding: 0.1rem 0.3rem;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
 }
 
-.comment .add-comment {
+.comment-form .add-comment {
   width: 90%;
-  border-bottom: 1px solid #ccc;
 }
-.comment .btn {
+.comment-form .btn {
   width: 10%;
   background-color: #fff;
 }

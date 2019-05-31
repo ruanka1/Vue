@@ -24,6 +24,7 @@
         </span>
       </div>
     </div>
+    <slot name="btn"></slot>
   </div>
 </template>
 
@@ -48,7 +49,7 @@ export default {
   width: 1.28rem;
   height: 1.8rem;
 }
-.single-movie .img img {
+.img img {
   width: 100%;
 }
 .single-movie .text {
@@ -65,12 +66,7 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.single-movie .text img {
-  width: 1rem;
-  position: absolute;
-  right: 0.2rem;
-  top: 0.1rem;
-}
+
 .single-movie .text .title {
   font-size: 0.34rem;
   line-height: 0.6rem;
@@ -96,5 +92,16 @@ export default {
 .single-movie .text .version .iconfont {
   font-size: 0.46rem;
   padding-right: 0.1rem;
+}
+
+.btn {
+  color: #fff;
+  border-radius: 4px;
+  font-size: 0.24rem;
+  cursor: pointer;
+  width: 0.94rem;
+  height: 0.54rem;
+  line-height: 0.6rem;
+  text-align: center;
 }
 </style>

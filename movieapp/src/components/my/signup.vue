@@ -5,7 +5,7 @@
         <input v-model="form.phone" placeholder="请输入手机号" class="phone" :disabled="lockPhone">
         <a :class="'send '+(disableCaptcha?'disable':'')" @click="sendCaptcha">
           <span v-if="count">{{count}}</span>
-          <span v-else>发送验证码</span>
+          <span v-else>验证码</span>
         </a>
       </div>
       <div class="input-item">
@@ -155,12 +155,11 @@ button {
   border: 1px solid #ccc;
   border-radius: 5px;
   background: #fff;
-  width: 2rem;
   height: 0.3rem;
   line-height: 0.3rem;
-  text-align: center;
   padding: 0.1rem;
   font-size: 0.32rem;
+  overflow: hidden;
 }
 
 .btn {

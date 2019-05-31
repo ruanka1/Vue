@@ -295,6 +295,7 @@ export default {
     },
     readFavorite() {
       if (!session.loggedIn()) return;
+      if (session.isAdmin()) return;
       api("favorite/read", {
         where: {
           and: {
@@ -310,6 +311,10 @@ export default {
     addToFavorite() {
       if (!session.loggedIn()) {
         this.$router.push("/login");
+        return;
+      }
+      if (session.isAdmin()) {
+        alert("管理员别闹");
         return;
       }
       if (!this.isFavorite) {

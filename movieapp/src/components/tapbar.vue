@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container border-top">
     <ul class="tap">
       <router-link to="/home" class="item" tag="li">
         <i class="iconfont icon-dianying"></i>
@@ -28,7 +28,6 @@ export default {};
   bottom: 0;
   width: 100%;
   height: 1rem;
-  border-top: 1px solid #ebe8e3;
   background-color: #fff;
 }
 

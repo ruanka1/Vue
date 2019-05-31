@@ -6,7 +6,7 @@
     <div v-if="errorTip" class="error">数据库中暂无该城市相关信息 请在热门城市中重新选择</div>
     <div v-else class="content">
       <ul class="list">
-        <li class="item" v-for="it in cinemaList" :key="it.id">
+        <li class="item border-bottom" v-for="it in cinemaList" :key="it.id">
           <div class="left">
             <div class="title">{{it.title}}</div>
             <div class="address">{{it.address}}</div>
@@ -92,7 +92,9 @@ export default {
 }
 .list .item {
   padding: 0.24rem 0;
-  border-bottom: 1px solid #f5f5f5;
+}
+.list .item:last-child:before {
+  border-bottom: 0;
 }
 .list .item:before,
 .list .item:after {
@@ -106,7 +108,7 @@ export default {
 }
 
 .item .left {
-  width: 75%;
+  width: 70%;
 }
 .item .left .title {
   font-size: 0.36rem;
@@ -117,7 +119,7 @@ export default {
   text-overflow: ellipsis;
 }
 .item .right {
-  width: 25%;
+  width: 30%;
   text-align: right;
   line-height: 0.5rem;
 }

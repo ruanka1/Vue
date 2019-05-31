@@ -3,13 +3,14 @@
     <ul class="list">
       <router-link
         :to="`/movie/${it.movie_id}`"
-        class="item"
+        class="item border-bottom"
         v-for="it in arr"
         :key="it.id"
         tag="li"
       >
-        <SingleMovie class="single-movie-cmp" :detail="it"/>
-        <div class="btn" @click.stop="tip">购票</div>
+        <SingleMovie class="single-movie-cmp" :detail="it">
+          <div class="btn" slot="btn" @click.stop="tip">购票</div>
+        </SingleMovie>
       </router-link>
     </ul>
   </div>
@@ -31,8 +32,11 @@ export default {
 </script>
 
 <style scoped>
+.single-movie-cmp >>> .single-movie .img {
+  width: 1.28rem;
+  height: 1.8rem;
+}
 .container {
-  flex: 1;
   overflow: auto;
 }
 
@@ -44,23 +48,18 @@ export default {
 .container .list .item {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #f5f5f5;
+}
+
+.container .list .item:last-child:before {
+  border-bottom: 0;
 }
 
 .single-movie-cmp {
-  flex: 1;
+  width: 100%;
 }
 
 .btn {
-  width: 1rem;
-  height: 0.54rem;
-  line-height: 0.6rem;
-  text-align: center;
   background-color: #f03d37;
-  color: #fff;
-  border-radius: 4px;
-  font-size: 0.24rem;
-  cursor: pointer;
 }
 </style>
 

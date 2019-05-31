@@ -19,14 +19,15 @@
       <div class="content">
         <div :is="currentTab"></div>
       </div>
-      <div class="test-account">
+      <!-- <div class="test-account">
         <div class="account">测试账号：123456</div>
         <div class="password">测试密码：123123</div>
-      </div>
+      </div>-->
     </div>
     <div v-else>
-      <div class="user-info">
+      <div class="user-info border-bottom">
         <div class="username">欢迎 {{session.user().phone}}</div>
+        <div class="logout" @click="clickToSetting">设置</div>
         <div class="logout" @click="logOut">登出</div>
       </div>
       <div v-if="!noComment" class="comment-list">
@@ -35,7 +36,7 @@
           <div v-else class="title">还没有评论过电影</div>
           <router-link
             :to="`/movie/${it.movie_id}`"
-            class="item"
+            class="item border-bottom"
             v-for="it in myCommentList"
             :key="it.id"
             tag="li"
@@ -73,7 +74,8 @@ export default {
       loggedIn: null,
       session,
       myCommentList: [],
-      noComment: null
+      noComment: null,
+      showSetting: false
     };
   },
   mounted() {
@@ -105,26 +107,28 @@ export default {
     },
     switchTab(tab) {
       this.currentTab = tab;
+    },
+    clickToSetting() {
+      this.$router.push("/setting");
     }
   }
 };
 </script>
 
 <style scoped>
-.single-movie-cmp /deep/ .text .text-item {
-  width: 100%;
-}
-
 .header {
   position: fixed;
   z-index: 1;
 }
-.nav {
+
+.container .wrapper {
   position: absolute;
   top: 1rem;
   left: 0;
   right: 0;
   bottom: 0;
+}
+.nav {
   height: 0.9rem;
   background-color: #f03d37;
   padding: 0 0.2rem;
@@ -145,18 +149,13 @@ export default {
   padding: 0.2rem;
   font-size: 0.36rem;
 }
+
 .tab-item.active {
   background-color: #fff;
   color: #f03d37;
   border-radius: 3px;
 }
-.content {
-  position: absolute;
-  top: 1.9rem;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
+
 .user-info {
   position: fixed;
   z-index: 1;
@@ -169,7 +168,6 @@ export default {
   display: flex;
   align-items: center;
   font-size: 0.4rem;
-  border-bottom: 1px solid #f5f5f5;
   background-color: #fff;
 }
 
@@ -177,14 +175,16 @@ export default {
   flex-basis: 80%;
   margin-left: 0.3rem;
 }
+
 .logout {
   flex-basis: 20%;
   border: 1px solid #f03d37;
   border-radius: 5px;
   text-align: center;
   padding: 0.1rem;
-  margin-right: 0.3rem;
+  margin-right: 0.2rem;
 }
+
 .comment-list {
   position: absolute;
   top: 2.02rem;
@@ -197,27 +197,32 @@ export default {
   margin: 0 0.24rem 1.5rem 0.24rem;
   overflow: hidden;
 }
+
 .comment-list .list .title {
   padding-top: 0.24rem;
   font-size: 0.32rem;
 }
+
 .comment-list .list .item {
   padding-bottom: 0.2rem;
-  border-bottom: 1px solid #f5f5f5;
 }
-.comment-list .list .item:last-child {
+
+.comment-list .list .item:last-child:before {
   border-bottom: 0;
 }
+
 .comment-list .list .meta {
   padding-bottom: 0.2rem;
   font-size: 0.3rem;
 }
+
 .comment-list .list .meta::before,
 .comment-list .list .meta::after {
   display: block;
   content: "";
   clear: both;
 }
+
 .comment-list .list .meta .user {
   width: 50%;
   float: left;
